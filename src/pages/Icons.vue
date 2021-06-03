@@ -2,7 +2,8 @@
   <div class="card">
     <div class="card-header">
       <h5 class="title">Sipariş Ver</h5>
-      <p class="category">Sipariş ver lo!</p>
+      <p class="category">Burada seçtiğiniz türdeki dondurmanın siparişini verebilirsiniz.Tek yapmanız gereken sipariş vermek istediğiniz dondurmanın altına adeti girdikten sonra "Satın Al" butonuna tıklamanız!</p>
+      <p class="category">Bilgilendirme: Firmamızın sipariş miktarı minumum 900, maximum 90.000'dir.</p>
     </div>
     <div class="card-body all-icons">
       <div class="row">
@@ -11,7 +12,7 @@
           <div class="font-icon-detail">
             <img :src="cikolatali" />
             <p>Çikolatalı Dondurma</p>
-            <input type="number" min="0" v-model="cikolatali_adet" placeholder="Alınacak Adet"/>
+            <input type="number" min="900" step="900" v-model="cikolatali_adet" placeholder="Alınacak Adet"/>
             <button type="submit" @click="cikolataliAl">Satın Al</button>
           </div>
         </div>
@@ -55,10 +56,14 @@ export default {
   },
   methods: {
     cikolataliAl(){
-      if(this.cikolatali_adet > 0){
-        
+      if(this.cikolatali_adet >= 900 && this.cikolatali_adet < 90000){
+        this.$alert("Siparişiniz Alınmıştır.")
+      }else if(this.cikolatali_adet < 900){
+        this.$alert("Sipariş Alınamadı. Minumum Sipariş Adetimiz 900'dür.")
+      }else if(this.cikolatali_adet > 90000){
+        this.$alert("Sipariş Alınamadı. Maximum Sipariş Adetimiz 90000'dür.")
       }else{
-        this.$alert("Selamun Aleyküm")
+        this.$alert("Sipariş Alınamadı. Lütfen Geçerli Bir Adet Giriniz.")
       }
     },
     cilekliAl(){
