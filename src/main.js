@@ -22,6 +22,9 @@ import router from "./router/index";
 import BlackDashboard from "./plugins/blackDashboard";
 import i18n from "./i18n"
 import './registerServiceWorker'
+import VueSimpleAlert from "vue-simple-alert";
+ 
+Vue.use(VueSimpleAlert);
 Vue.use(BlackDashboard);
 Vue.use(VueRouter);
 Vue.use(RouterPrefetch);
