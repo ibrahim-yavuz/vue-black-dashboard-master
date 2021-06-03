@@ -2,7 +2,7 @@
   <div class="card">
     <div class="card-header">
       <h5 class="title">Sipariş Ver</h5>
-      <p class="category">Bu kısımdan sipariş verebilirsiniz!</p>
+      <p class="category">Sipariş ver lo!</p>
     </div>
     <div class="card-body all-icons">
       <div class="row">
