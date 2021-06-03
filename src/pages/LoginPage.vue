@@ -11,6 +11,7 @@ export default {
     return {
       kullanici_adi: null,
       sifre: null,
+      denemeaq: "",
     };
   },
   methods: {
