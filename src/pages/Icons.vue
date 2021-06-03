@@ -73,6 +73,11 @@ import muzlu from "./icons/muzlu_dondurma.png";
 export default {
   data: function() {
     return {
+      order2: {
+        customer_id2: null,
+        order_date2: null,
+        deadline2: null
+      },
       cikolatali: cikolatali,
       cilekli: cilekli,
       muzlu: muzlu,
@@ -84,6 +89,18 @@ export default {
   methods: {
     cikolataliAl() {
       if (this.cikolatali_adet >= 900 && this.cikolatali_adet < 90000) {
+        this.order2.customer_id2 = "8";
+        this.order2.order_date2 = this.currentDateTime();
+        this.order2.deadline2 = this.DeadDateTime();
+        console.log(this.order2);
+        this.$axios.post(
+          "http://127.0.0.1:8000/orders/",
+          { mode: "no-cors" },
+          this.order2
+        );
+        //.then(result => {
+        //  console.log(result);
+        //});
         this.$alert("Siparişiniz Alınmıştır.");
       } else if (this.cikolatali_adet < 900) {
         this.$alert("Sipariş Alınamadı. Minumum Sipariş Adetimiz 900'dür.");
@@ -100,6 +117,40 @@ export default {
     muzluAl() {
       if (this.muzlu_adet > 0) {
       }
+    },
+    currentDateTime() {
+      const current = new Date();
+      const day0 =
+        current.getDate() < 10 ? "0" + current.getDate() : current.getDate();
+
+      const month0 =
+        current.getMonth() + 1 < 10
+          ? "0" + (current.getMonth() + 1)
+          : current.getMonth() + 1;
+
+      const date = current.getFullYear() + "-" + month0 + "-" + day0;
+
+      const dateTime = date;
+
+      return dateTime;
+    },
+    DeadDateTime() {
+      const current = new Date();
+      const day0 =
+        current.getDate() + 7 < 10
+          ? "0" + (current.getDate() + 7)
+          : current.getDate() + 7;
+
+      const month0 =
+        current.getMonth() + 1 < 10
+          ? "0" + (current.getMonth() + 1)
+          : current.getMonth() + 1;
+
+      const date = current.getFullYear() + "-" + month0 + "-" + day0;
+
+      const dateTime = date;
+
+      return dateTime;
     }
   }
 };
