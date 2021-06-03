@@ -1,16 +1,21 @@
 <template>
   <div id="kapsayici">
-    <input placeholder="Kullanıcı Adı" />
-    <input placeholder="Şifre" type="password" />
-    <button></button>
+    <input v-model="kullanici_adi" placeholder="Kullanıcı Adı" />
+    <input v-model="sifre" placeholder="Şifre" type="password" />
+    <button @click="tiklama">Giriş Yap</button>
   </div>
 </template>
 <script>
 export default {
-  data: {},
+  data() {
+    return {
+      kullanici_adi: null,
+      sifre: null,
+    };
+  },
   methods: {
     tiklama() {
-      console.log("Deneme");
+      console.log(this.kullanici_adi + " - " + this.sifre);
     },
   },
   mounted() {},
@@ -21,8 +26,8 @@ export default {
 <style scoped>
 #kapsayici {
   text-align: center;
-
   color: white;
   font-size: 18px;
+  display: list-item;
 }
 </style>
