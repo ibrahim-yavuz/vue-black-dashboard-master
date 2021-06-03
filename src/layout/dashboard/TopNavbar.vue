@@ -81,7 +81,7 @@
                 </div>
                 <b class="caret d-none d-lg-block d-xl-block"></b>
                 <p class="d-lg-none">
-                  Log out
+                  Çıkış
                 </p>
               </a>
               <li class="nav-link">
