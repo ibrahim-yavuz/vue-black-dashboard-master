@@ -169,14 +169,6 @@ import UserTable from "./Dashboard/UserTable";
 import config from "@/config";
 
 
-let globalVar = {
-  data(){
-    return{
-      globalVar: "asdsad"
-    }
-  }
-}
-
 export default {
   components: {
     LineChart,
@@ -270,7 +262,7 @@ export default {
       blueBarChart: {
         extraOptions: chartConfigs.barChartOptions,
         chartData: {
-          labels: [globalVar, "GER", "AUS", "UK", "RO", "BR"],
+          labels: ["globalVar", "GER", "AUS", "UK", "RO", "BR"],
           datasets: [
             {
               label: "Countries",
