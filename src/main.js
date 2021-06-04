@@ -23,6 +23,7 @@ import BlackDashboard from "./plugins/blackDashboard";
 import i18n from "./i18n"
 import './registerServiceWorker'
 import VueSimpleAlert from "vue-simple-alert";
+import vuetify from '@/plugins/vuetify'
  
 Vue.use(VueSimpleAlert);
 Vue.use(BlackDashboard);
@@ -33,6 +34,7 @@ Vue.prototype.$axios = axios;
 
 /* eslint-disable no-new */
 new Vue({
+  vuetify,
   router,
   i18n,
   render: h => h(App)
