@@ -22,9 +22,14 @@
       ></v-text-field>
     </div>
     <div>
-      <v-btn @click="tiklama" class="ma-2" tile color="indigo" dark>
+      <v-btn @click="tiklama" class="ma-2 btn" tile color="secondary" dark>
         <v-icon left>mdi-login</v-icon>
-        Giriş Yap
+        Müşteri Olarak Giriş Yap
+      </v-btn>
+
+      <v-btn @click="tiklama" class="ma-2 btn" tile color="indigo" dark>
+        <v-icon left>mdi-login</v-icon>
+        Satıcı Olarak Giriş Yap
       </v-btn>
     </div>
   </div>
@@ -34,8 +39,10 @@ import vuetify from "@/plugins/vuetify";
 export default {
   data() {
     return {
+      aktif_kullanici_id: {},
       kullanici_adi: null,
       sifre: null,
+      is_logged_in: false,
     };
   },
   methods: {
@@ -50,8 +57,12 @@ export default {
             this.sifre == element["password"]
           ) {
             bulunduMu = true;
-            console.log("Buraya girdi");
-            this.$alert("Giriş Başarılı");
+            localStorage.setItem("current_user", JSON.stringify(element));
+            this.aktif_kullanici_id = JSON.parse(
+              localStorage.getItem("current_user")
+            );
+
+            this.$router.push({ name: "dashboard" });
           } else if (sayac == response.data.length && !bulunduMu) {
             this.$alert("Giriş Başarısız");
           }
@@ -73,6 +84,12 @@ export default {
   text-align: center;
   color: white;
   font-size: 18px;
+  width: 100%;
+}
+
+.btn {
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 .input-div {

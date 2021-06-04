@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <side-bar>
+    <side-bar v-if="!logindeMi">
       <template slot="links">
         <sidebar-link
           to="/login"
@@ -62,10 +62,14 @@ import DashboardContent from "./Content.vue";
 import MobileMenu from "./MobileMenu";
 export default {
   components: {
+    logindeMi: false,
     TopNavbar,
     ContentFooter,
     DashboardContent,
     MobileMenu,
+  },
+  data() {
+    return {};
   },
   methods: {
     toggleSidebar() {
@@ -73,6 +77,9 @@ export default {
         this.$sidebar.displaySidebar(false);
       }
     },
+  },
+  created() {
+    this.logindeMi = this.$route.name == "login" ? true : false;
   },
 };
 </script>
