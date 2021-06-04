@@ -134,7 +134,7 @@ export default {
         this.order2.order_date = this.currentDateTime();
         this.order2.deadline = this.mydate;
 
-        this.orderitems2.product_id = "20";
+        this.orderitems2.product_id = Urunler.CIKOLATALI_DONDURMA;
         this.orderitems2.amount = this.cikolatali_adet;
 
         this.$axios
@@ -168,34 +168,29 @@ export default {
       if (this.cilekli_adet >= 900 && this.cilekli_adet < 90000) {
         this.order2.customer_id = "61";
         this.order2.order_date = this.currentDateTime();
-<<<<<<< HEAD
-        this.order2.deadline = this.myenddate;
-        this.$axios.post("http://127.0.0.1:8000/orders/", this.order2, {
-          mode: "no-cors",
-        });
-=======
         this.order2.deadline = this.mydate;
 
-        this.orderitems2.product_id = "21";
+        this.orderitems2.product_id = Urunler.CILEKLI_DONDURMA;
         this.orderitems2.amount = this.cilekli_adet;
 
         this.$axios
           .post("http://127.0.0.1:8000/orders/", this.order2, {
-            mode: "no-cors"
+            mode: "no-cors",
           })
-          .then(response => {
-            this.$axios.get("http://127.0.0.1:8000/orders/").then(response => {
-              this.value = response.data[response.data.length - 1];
-              this.orderitems2.order_id = this.value.order_id;
-              this.$axios.post(
-                "http://127.0.0.1:8000/orderitems/",
-                this.orderitems2,
-                { mode: "no-cors" }
-              );
-            });
+          .then((response) => {
+            this.$axios
+              .get("http://127.0.0.1:8000/orders/")
+              .then((response) => {
+                this.value = response.data[response.data.length - 1];
+                this.orderitems2.order_id = this.value.order_id;
+                this.$axios.post(
+                  "http://127.0.0.1:8000/orderitems/",
+                  this.orderitems2,
+                  { mode: "no-cors" }
+                );
+              });
           });
 
->>>>>>> ee8d034ddaabdc51d8952ddd0112e309bf604cdd
         this.$alert("Siparişiniz Alınmıştır.");
       } else if (this.cilekli_adet < 900) {
         this.$alert("Sipariş Alınamadı. Minumum Sipariş Adetimiz 900'dür.");
@@ -209,34 +204,29 @@ export default {
       if (this.muzlu_adet >= 900 && this.muzlu_adet < 90000) {
         this.order2.customer_id = "71";
         this.order2.order_date = this.currentDateTime();
-<<<<<<< HEAD
-        this.order2.deadline = this.myenddate;
-        this.$axios.post("http://127.0.0.1:8000/orders/", this.order2, {
-          mode: "no-cors",
-        });
-=======
         this.order2.deadline = this.mydate;
 
-        this.orderitems2.product_id = "22";
+        this.orderitems2.product_id = Urunler.MUZLU_DONDURMA;
         this.orderitems2.amount = this.muzlu_adet;
 
         this.$axios
           .post("http://127.0.0.1:8000/orders/", this.order2, {
-            mode: "no-cors"
+            mode: "no-cors",
           })
-          .then(response => {
-            this.$axios.get("http://127.0.0.1:8000/orders/").then(response => {
-              this.value = response.data[response.data.length - 1];
-              this.orderitems2.order_id = this.value.order_id;
-              this.$axios.post(
-                "http://127.0.0.1:8000/orderitems/",
-                this.orderitems2,
-                { mode: "no-cors" }
-              );
-            });
+          .then((response) => {
+            this.$axios
+              .get("http://127.0.0.1:8000/orders/")
+              .then((response) => {
+                this.value = response.data[response.data.length - 1];
+                this.orderitems2.order_id = this.value.order_id;
+                this.$axios.post(
+                  "http://127.0.0.1:8000/orderitems/",
+                  this.orderitems2,
+                  { mode: "no-cors" }
+                );
+              });
           });
 
->>>>>>> ee8d034ddaabdc51d8952ddd0112e309bf604cdd
         this.$alert("Siparişiniz Alınmıştır.");
       } else if (this.muzlu_adet < 900) {
         this.$alert("Sipariş Alınamadı. Minumum Sipariş Adetimiz 900'dür.");
@@ -280,13 +270,8 @@ export default {
 
       return dateTime;
     },
-<<<<<<< HEAD
     getUnits: function () {
-      this.mydate = this.currentDateTime();
-=======
-    getUnits: function() {
       this.mydate = this.DeadDateTime();
->>>>>>> ee8d034ddaabdc51d8952ddd0112e309bf604cdd
       this.myenddate = this.DeadDateTime();
     },
   },
