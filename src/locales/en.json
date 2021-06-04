@@ -113,13 +113,13 @@
   "sidebar": {
     "title": "Creative Tim",
     "shortTitle": "CT",
-    "dashboard": "Ibrahim",
+    "dashboard": "Kontrol Paneli",
     "icons": "Sipariş Ver",
-    "maps": "Maps",
-    "notifications": "Notifications",
-    "userProfile": "User Profile",
-    "tableList": "Table List",
-    "typography": "Typography",
+    "maps": "Siparişler",
+    "notifications": "Üretim",
+    "userProfile": "Profil Ayarları",
+    "tableList": "Stok Durumu",
+    "typography": "Stok Ürün Ekle",
     "login" : "Giriş Yap"
   }
 }
