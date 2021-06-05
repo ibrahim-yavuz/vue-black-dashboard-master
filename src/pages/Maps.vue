@@ -26,6 +26,14 @@
                 {{ item.deadline }}
               </v-chip>
             </template>
+            <template v-slot:[`item.action`]="">
+              <v-btn icon large elevation="12" @click="Onayla()">
+                <v-icon left>mdi-check </v-icon>
+              </v-btn>
+              <v-btn icon large elevation="12" @click="IptalEt()">
+                <v-icon left>mdi-delete </v-icon>
+              </v-btn>
+            </template>
           </v-data-table>
         </v-card>
       </template>
@@ -42,10 +50,13 @@ export default {
       desserts: [],
       search: "",
       headers: [
-        { text: "order_id", value: "order_id" },
-        { text: "customer_id", value: "customer_id" },
-        { text: "order_date", value: "order_date" },
-        { text: "deadline", value: "deadline" }
+        { text: "Sipariş No", value: "order_id" },
+        { text: "Müşteri No", value: "customer_id" },
+        { text: "Sipariş Tarihi", value: "order_date" },
+        { text: "Son Teslim Tarihi", value: "deadline" },
+        { text: "Adet", value: "amount" },
+        { text: "Ürün No", value: "product_id" },
+        { text: "Düzenle", value: "action" }
       ],
       loaded: false
     };
@@ -53,33 +64,28 @@ export default {
   components: { VueTableDynamic },
   methods: {
     getArray() {
-      this.$axios.get("http://127.0.0.1:8000/orders/").then(res => {
-        this.desserts = res.data;
-      });
+      this.$axios
+        .get("http://127.0.0.1:8000/orders/", {
+          mode: "no-cors"
+        })
+        .then(res => {
+          this.desserts = res.data;
+          this.$axios
+            .get("http://127.0.0.1:8000/orderitems/", {
+              mode: "no-cors"
+            })
+            .then(res => {
+              for (let i = 0; i < res.data.length; i++) {
+                for (let j = 0; j < res.data.length; j++) {
+                  if (this.desserts[i].order_id == res.data[j].order_id) {
+                    this.desserts[i].amount = res.data[j].amount;
+                    this.desserts[i].product_id = res.data[j].product_id;
+                  }
+                }
+              }
+            });
+        });
       this.loaded = true;
-    },
-    getColor(date) {
-      this.splited = date.split("-");
-      this.splitedDate = this.currentDateTime;
-      if (this.splited[0] > this.splitedDate[0]) {
-        return "green";
-      } else if (this.splited[0] == this.splitedDate[0]) {
-        if (this.splited[1] > this.splitedDate[1]) {
-          return "green";
-        } else if (this.splited[1] == this.splitedDate[1]) {
-          if (this.splited[2] > this.splitedDate[2]) {
-            return "green";
-          } else if (this.splited[2] == this.splitedDate[2]) {
-            return "orange";
-          } else {
-            return "red";
-          }
-        } else {
-          return "red";
-        }
-      } else {
-        return "red";
-      }
     },
     currentDateTime() {
       const current = new Date();

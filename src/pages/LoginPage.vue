@@ -52,7 +52,7 @@ export default {
       aktif_kullanici_id: {},
       kullanici_adi: null,
       sifre: null,
-      is_logged_in: false,
+      is_logged_in: false
     };
   },
   methods: {
@@ -61,10 +61,10 @@ export default {
       let bulunduMu = false;
       this.$axios
         .get("http://localhost:8000/customers/", {
-          mode: "no-cors",
+          mode: "no-cors"
         })
-        .then((response) =>
-          response.data.forEach((element) => {
+        .then(response =>
+          response.data.forEach(element => {
             sayac++;
             if (
               this.kullanici_adi == element["name"] &&
@@ -90,10 +90,10 @@ export default {
       let bulunduMu = false;
       this.$axios
         .get("http://localhost:8000/users/", {
-          mode: "no-cors",
+          mode: "no-cors"
         })
-        .then((response) =>
-          response.data.forEach((element) => {
+        .then(response =>
+          response.data.forEach(element => {
             sayac++;
             if (
               this.kullanici_adi == element["name"] &&
@@ -120,17 +120,17 @@ export default {
           "http://127.0.0.1:8000/customers/",
           {
             name: this.kullanici_adi,
-            password: this.sifre,
+            password: this.sifre
           },
           {
-            mode: "no-cors",
+            mode: "no-cors"
           }
         )
-        .then((response) => console.log(response.data));
-    },
+        .then(response => console.log(response.data));
+    }
   },
   mounted() {},
-  created() {},
+  created() {}
 };
 </script>
 
