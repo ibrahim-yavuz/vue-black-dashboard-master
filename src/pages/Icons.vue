@@ -144,15 +144,19 @@ export default {
             mode: "no-cors"
           })
           .then(response => {
-            this.$axios.get("http://127.0.0.1:8000/orders/").then(response => {
-              this.value = response.data[response.data.length - 1];
-              this.orderitems2.order_id = this.value.order_id;
-              this.$axios.post(
-                "http://127.0.0.1:8000/orderitems/",
-                this.orderitems2,
-                { mode: "no-cors" }
-              );
-            });
+            this.$axios
+              .get("http://127.0.0.1:8000/orders/", {
+                mode: "no-cors"
+              })
+              .then(response => {
+                this.value = response.data[response.data.length - 1];
+                this.orderitems2.order_id = this.value.order_id;
+                this.$axios.post(
+                  "http://127.0.0.1:8000/orderitems/",
+                  this.orderitems2,
+                  { mode: "no-cors" }
+                );
+              });
           });
 
         this.$alert("Siparişiniz Alınmıştır.");
@@ -180,15 +184,19 @@ export default {
             mode: "no-cors"
           })
           .then(response => {
-            this.$axios.get("http://127.0.0.1:8000/orders/").then(response => {
-              this.value = response.data[response.data.length - 1];
-              this.orderitems2.order_id = this.value.order_id;
-              this.$axios.post(
-                "http://127.0.0.1:8000/orderitems/",
-                this.orderitems2,
-                { mode: "no-cors" }
-              );
-            });
+            this.$axios
+              .get("http://127.0.0.1:8000/orders/", {
+                mode: "no-cors"
+              })
+              .then(response => {
+                this.value = response.data[response.data.length - 1];
+                this.orderitems2.order_id = this.value.order_id;
+                this.$axios.post(
+                  "http://127.0.0.1:8000/orderitems/",
+                  this.orderitems2,
+                  { mode: "no-cors" }
+                );
+              });
           });
 
         this.$alert("Siparişiniz Alınmıştır.");
@@ -216,15 +224,19 @@ export default {
             mode: "no-cors"
           })
           .then(response => {
-            this.$axios.get("http://127.0.0.1:8000/orders/").then(response => {
-              this.value = response.data[response.data.length - 1];
-              this.orderitems2.order_id = this.value.order_id;
-              this.$axios.post(
-                "http://127.0.0.1:8000/orderitems/",
-                this.orderitems2,
-                { mode: "no-cors" }
-              );
-            });
+            this.$axios
+              .get("http://127.0.0.1:8000/orders/", {
+                mode: "no-cors"
+              })
+              .then(response => {
+                this.value = response.data[response.data.length - 1];
+                this.orderitems2.order_id = this.value.order_id;
+                this.$axios.post(
+                  "http://127.0.0.1:8000/orderitems/",
+                  this.orderitems2,
+                  { mode: "no-cors" }
+                );
+              });
           });
 
         this.$alert("Siparişiniz Alınmıştır.");

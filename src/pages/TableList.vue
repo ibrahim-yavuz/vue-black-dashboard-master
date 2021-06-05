@@ -52,18 +52,26 @@ export default {
   components: { VueTableDynamic },
   methods: {
     getArray() {
-      this.$axios.get("http://127.0.0.1:8000/products/").then(res => {
-        this.desserts = res.data;
-        this.$axios.get("http://127.0.0.1:8000/subproducttree/").then(res => {
-          for (let i = 0; i < res.data.length; i++) {
-            for (let j = 0; j < res.data.length; j++) {
-              if (this.desserts[i].product_id == res.data[j].product_id) {
-                this.desserts[i].amount = res.data[j].amount;
+      this.$axios
+        .get("http://127.0.0.1:8000/products/", {
+          mode: "no-cors"
+        })
+        .then(res => {
+          this.desserts = res.data;
+          this.$axios
+            .get("http://127.0.0.1:8000/subproducttree/", {
+              mode: "no-cors"
+            })
+            .then(res => {
+              for (let i = 0; i < res.data.length; i++) {
+                for (let j = 0; j < res.data.length; j++) {
+                  if (this.desserts[i].product_id == res.data[j].product_id) {
+                    this.desserts[i].amount = res.data[j].amount;
+                  }
+                }
               }
-            }
-          }
+            });
         });
-      });
     }
   },
 
