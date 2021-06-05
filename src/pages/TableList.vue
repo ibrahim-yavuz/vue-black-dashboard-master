@@ -4,7 +4,11 @@
       <v-card>
         <v-card-title>
           Stok
-          <v-spacer></v-spacer>
+          <v-spacer>
+            <v-btn icon large elevation="12" @click="yenile()">
+              <v-icon>mdi-reload </v-icon>
+            </v-btn>
+          </v-spacer>
           <v-text-field
             v-model="search"
             append-icon="mdi-magnify"
@@ -72,6 +76,9 @@ export default {
               }
             });
         });
+    },
+    yenile() {
+      this.$forceUpdate();
     }
   },
 

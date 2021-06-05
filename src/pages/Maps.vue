@@ -5,7 +5,11 @@
         <v-card>
           <v-card-title>
             Sipariş Durumu
-            <v-spacer></v-spacer>
+            <v-spacer>
+              <v-btn icon large elevation="12" @click="yenile()">
+                <v-icon>mdi-reload </v-icon>
+              </v-btn>
+            </v-spacer>
 
             <v-text-field
               v-model="search"
@@ -34,7 +38,7 @@
                 elevation="12"
                 @click="Onayla(item.order_id, item.order_item_id)"
               >
-                <v-icon left>mdi-check </v-icon>
+                <v-icon>mdi-check </v-icon>
               </v-btn>
               <v-btn
                 icon
@@ -42,7 +46,7 @@
                 elevation="12"
                 @click="IptalEt(item.order_id, item.order_item_id)"
               >
-                <v-icon left>mdi-delete </v-icon>
+                <v-icon>mdi-delete </v-icon>
               </v-btn>
             </template>
           </v-data-table>
@@ -125,9 +129,7 @@ export default {
         .then(response =>
           this.$axios
             .delete("http://localhost:8000/orderitems/" + itemid + "/")
-            .then(res => {
-              //this.$forceUpdate();
-            })
+            .then(res => {})
         );
     },
     IptalEt(id, itemid) {
@@ -136,6 +138,9 @@ export default {
         .then(response =>
           this.$axios.delete("http://localhost:8000/orderitems/" + itemid + "/")
         );
+    },
+    yenile() {
+      this.$forceUpdate();
     }
   },
 
