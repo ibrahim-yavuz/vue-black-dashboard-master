@@ -2,7 +2,7 @@
   <card>
     <h5 slot="header" class="title">Profil</h5>
     <div class="row">
-      <div class="col-md-6 pr-md-1">
+      <div class="col-md-12 pr-md-2">
         <v-text-field
           v-model="username"
           label="Kullanıcı Adı"
