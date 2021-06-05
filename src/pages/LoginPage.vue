@@ -59,51 +59,59 @@ export default {
     tiklamaMusteri() {
       let sayac = 0;
       let bulunduMu = false;
-      this.$axios.get("http://localhost:8000/customers/").then((response) =>
-        response.data.forEach((element) => {
-          sayac++;
-          if (
-            this.kullanici_adi == element["name"] &&
-            this.sifre == element["password"]
-          ) {
-            bulunduMu = true;
-            localStorage.setItem("user_type", "customer");
-            localStorage.setItem("current_user", JSON.stringify(element));
-            this.aktif_kullanici_id = JSON.parse(
-              localStorage.getItem("current_user")
-            );
-
-            this.$router.push({ name: "dashboard" });
-          } else if (sayac == response.data.length && !bulunduMu) {
-            this.$alert("Giriş Başarısız");
-          }
+      this.$axios
+        .get("http://localhost:8000/customers/", {
+          mode: "no-cors",
         })
-      );
+        .then((response) =>
+          response.data.forEach((element) => {
+            sayac++;
+            if (
+              this.kullanici_adi == element["name"] &&
+              this.sifre == element["password"]
+            ) {
+              bulunduMu = true;
+              localStorage.setItem("user_type", "customer");
+              localStorage.setItem("current_user", JSON.stringify(element));
+              this.aktif_kullanici_id = JSON.parse(
+                localStorage.getItem("current_user")
+              );
+
+              this.$router.push({ name: "dashboard" });
+            } else if (sayac == response.data.length && !bulunduMu) {
+              this.$alert("Giriş Başarısız");
+            }
+          })
+        );
     },
 
     tiklamaSatici() {
       let sayac = 0;
       let bulunduMu = false;
-      this.$axios.get("http://localhost:8000/users/").then((response) =>
-        response.data.forEach((element) => {
-          sayac++;
-          if (
-            this.kullanici_adi == element["name"] &&
-            this.sifre == element["password"]
-          ) {
-            bulunduMu = true;
-            localStorage.setItem("user_type", "user");
-            localStorage.setItem("current_user", JSON.stringify(element));
-            this.aktif_kullanici_id = JSON.parse(
-              localStorage.getItem("current_user")
-            );
-
-            this.$router.push({ name: "dashboard" });
-          } else if (sayac == response.data.length && !bulunduMu) {
-            this.$alert("Giriş Başarısız");
-          }
+      this.$axios
+        .get("http://localhost:8000/users/", {
+          mode: "no-cors",
         })
-      );
+        .then((response) =>
+          response.data.forEach((element) => {
+            sayac++;
+            if (
+              this.kullanici_adi == element["name"] &&
+              this.sifre == element["password"]
+            ) {
+              bulunduMu = true;
+              localStorage.setItem("user_type", "user");
+              localStorage.setItem("current_user", JSON.stringify(element));
+              this.aktif_kullanici_id = JSON.parse(
+                localStorage.getItem("current_user")
+              );
+
+              this.$router.push({ name: "dashboard" });
+            } else if (sayac == response.data.length && !bulunduMu) {
+              this.$alert("Giriş Başarısız");
+            }
+          })
+        );
     },
 
     uyeOl() {
