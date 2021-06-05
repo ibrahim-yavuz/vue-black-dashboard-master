@@ -105,6 +105,12 @@ export default {
     },
     onButtonClick(item) {
       console.log("click on " + item.orderi_id);
+    },
+    Onayla() {
+      //İPO BAK HELEEEEEEE
+    },
+    IptalEt() {
+      //İPO BAK HELEEEEEEE
     }
   },
 
