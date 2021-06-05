@@ -32,12 +32,7 @@
               </v-chip>
             </template>
             <template v-slot:[`item.action`]="{ item }">
-              <v-btn
-                icon
-                large
-                elevation="12"
-                @click="Onayla(item.order_id, item.order_item_id)"
-              >
+              <v-btn icon large elevation="12" @click="Onayla(item)">
                 <v-icon>mdi-check </v-icon>
               </v-btn>
               <v-btn
@@ -62,6 +57,7 @@ export default {
     return {
       splited: null,
       splitedDate: null,
+      subtemp: [],
       temp: [],
       desserts: [],
       search: "",
@@ -73,6 +69,7 @@ export default {
         { text: "Adet", value: "amount" },
         { text: "Ürün No", value: "product_id" },
         { text: "Ürün Sepet No", value: "order_item_id" },
+        { text: "Stok No", value: "sub_product_id" },
         { text: "Düzenle", value: "action" }
       ],
       loaded: false
@@ -81,28 +78,33 @@ export default {
   components: { VueTableDynamic },
   methods: {
     getArray() {
-      this.$axios
-        .get("http://127.0.0.1:8000/orders/", {
-          mode: "no-cors"
-        })
-        .then(res => {
-          this.desserts = res.data;
+      this.$axios.get("http://127.0.0.1:8000/orders/").then(response => {
+        this.desserts = response.data;
+        this.$axios.get("http://127.0.0.1:8000/orderitems/").then(res => {
+          for (let i = 0; i < this.desserts.length; i++) {
+            for (let j = 0; j < res.data.length; j++) {
+              if (this.desserts[i].order_id == res.data[j].order_id) {
+                this.desserts[i].amount = res.data[j].amount;
+                this.desserts[i].product_id = res.data[j].product_id;
+                this.desserts[i].order_item_id = res.data[j].order_item_id;
+              }
+            }
+          }
           this.$axios
-            .get("http://127.0.0.1:8000/orderitems/", {
-              mode: "no-cors"
-            })
-            .then(res => {
-              for (let i = 0; i < res.data.length; i++) {
-                for (let j = 0; j < res.data.length; j++) {
-                  if (this.desserts[i].order_id == res.data[j].order_id) {
-                    this.desserts[i].amount = res.data[j].amount;
-                    this.desserts[i].product_id = res.data[j].product_id;
-                    this.desserts[i].order_item_id = res.data[j].order_item_id;
+            .get("http://127.0.0.1:8000/subproducttree/")
+            .then(resp => {
+              this.subtemp = resp.data;
+              for (let i = 0; i < this.desserts.length; i++) {
+                for (let j = 0; j < resp.data.length; j++) {
+                  if (this.desserts[i].product_id == resp.data[j].product_id) {
+                    this.desserts[i].sub_product_id =
+                      resp.data[j].sub_product_id;
                   }
                 }
               }
             });
         });
+      });
       this.loaded = true;
     },
     currentDateTime() {
@@ -121,20 +123,47 @@ export default {
 
       return dateTime;
     },
-    onButtonClick(item) {
-      console.log("click on " + item.orderi_id);
+    Onayla(selecteditem) {
+      var yeni = 0;
+      for (let i = 0; i < this.subtemp.length; i++) {
+        if (this.subtemp[i].product_id == selecteditem.product_id) {
+          if (this.subtemp[i].amount >= selecteditem.amount) {
+            yeni = this.subtemp[i].amount - selecteditem.amount;
+            this.$axios.put(
+              "http://localhost:8000/subproducttree/" +
+                selecteditem.sub_product_id +
+                "/",
+              {
+                product_id: selecteditem.product_id,
+                amount: yeni
+              }
+            );
+            this.$axios.delete(
+              "http://localhost:8000/orders/" + selecteditem.order_id + "/"
+            );
+            this.$axios.delete(
+              "http://localhost:8000/orderitems/" +
+                selecteditem.order_item_id +
+                "/"
+            );
+
+            this.desserts = this.desserts.filter(
+              item => item.order_id != selecteditem.order_id
+            );
+
+            this.$alert(
+              selecteditem.order_id +
+                "' Numaralı Sipariş " +
+                selecteditem.customer_id +
+                "' Numaralı Müşteriye Teslim Edildi."
+            );
+          } else {
+            this.$alert("İstenilen Ürüne Ait Yeterli Stok Yok");
+          }
+        }
+      }
     },
-    Onayla(id, itemid) {
-      this.$axios
-        .delete("http://localhost:8000/orders/" + id + "/")
-        .then(response =>
-          this.$axios
-            .delete("http://localhost:8000/orderitems/" + itemid + "/")
-            .then(res => {
-              this.desserts = this.desserts.filter(item => item.order_id != id);
-            })
-        );
-    },
+
     IptalEt(id, itemid) {
       this.$axios
         .delete("http://localhost:8000/orders/" + id + "/")
