@@ -62,6 +62,7 @@ export default {
     return {
       splited: null,
       splitedDate: null,
+      temp: [],
       desserts: [],
       search: "",
       headers: [
@@ -129,16 +130,24 @@ export default {
         .then(response =>
           this.$axios
             .delete("http://localhost:8000/orderitems/" + itemid + "/")
-            .then(res => {})
+            .then(res => {
+              this.desserts = this.desserts.filter(item => item.order_id != id);
+            })
         );
     },
     IptalEt(id, itemid) {
       this.$axios
         .delete("http://localhost:8000/orders/" + id + "/")
         .then(response =>
-          this.$axios.delete("http://localhost:8000/orderitems/" + itemid + "/")
+          this.$axios
+            .delete("http://localhost:8000/orderitems/" + itemid + "/")
+            .then(res => {
+              this.desserts = this.desserts.filter(item => item.order_id != id);
+              this.$alert(id + "'Numaralı Sipariş İptal Edildi.");
+            })
         );
     },
+
     yenile() {
       this.$forceUpdate();
     }
