@@ -3,8 +3,21 @@
     <h5 slot="header" class="title">Profil</h5>
     <div class="row">
       <div class="col-md-6 pr-md-1">
-        <v-text-field v-model="username" dark></v-text-field>
-        <v-text-field v-model="sifre" dark></v-text-field>
+        <v-text-field
+          v-model="username"
+          label="Kullanıcı Adı"
+          filled
+          append-icon="mdi-account"
+          dark
+        ></v-text-field>
+        <v-text-field
+          v-model="sifre"
+          label="Şifre"
+          filled
+          type="password"
+          append-icon="mdi-lock"
+          dark
+        ></v-text-field>
         <v-btn @click="save" dark>Kaydet</v-btn>
       </div>
     </div>
@@ -50,10 +63,15 @@ export default {
     },
   },
   created() {
-    this.username = JSON.parse(localStorage.getItem("current_user"))["user_id"];
+    this.username = JSON.parse(localStorage.getItem("current_user"))["name"];
     console.log(this.username);
   },
 };
 </script>
-<style>
+<style scoped>
+.row {
+  margin: auto;
+  width: 100%;
+  text-align: center;
+}
 </style>
