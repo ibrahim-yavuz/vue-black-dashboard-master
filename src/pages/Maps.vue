@@ -26,11 +26,21 @@
                 {{ item.deadline }}
               </v-chip>
             </template>
-            <template v-slot:[`item.action`]="">
-              <v-btn icon large elevation="12" @click="Onayla()">
+            <template v-slot:[`item.action`]="{ item }">
+              <v-btn
+                icon
+                large
+                elevation="12"
+                @click="Onayla(item.order_id, item.order_item_id)"
+              >
                 <v-icon left>mdi-check </v-icon>
               </v-btn>
-              <v-btn icon large elevation="12" @click="IptalEt()">
+              <v-btn
+                icon
+                large
+                elevation="12"
+                @click="IptalEt(item.order_id, item.order_item_id)"
+              >
                 <v-icon left>mdi-delete </v-icon>
               </v-btn>
             </template>
@@ -56,6 +66,7 @@ export default {
         { text: "Son Teslim Tarihi", value: "deadline" },
         { text: "Adet", value: "amount" },
         { text: "Ürün No", value: "product_id" },
+        { text: "Ürün Sepet No", value: "order_item_id" },
         { text: "Düzenle", value: "action" }
       ],
       loaded: false
@@ -80,6 +91,7 @@ export default {
                   if (this.desserts[i].order_id == res.data[j].order_id) {
                     this.desserts[i].amount = res.data[j].amount;
                     this.desserts[i].product_id = res.data[j].product_id;
+                    this.desserts[i].order_item_id = res.data[j].order_item_id;
                   }
                 }
               }
@@ -106,11 +118,19 @@ export default {
     onButtonClick(item) {
       console.log("click on " + item.orderi_id);
     },
-    Onayla() {
-      //İPO BAK HELEEEEEEE
+    Onayla(id, itemid) {
+      this.$axios
+        .delete("http://localhost:8000/orders/" + id + "/")
+        .then(response =>
+          this.$axios.delete("http://localhost:8000/orderitems/" + itemid + "/")
+        );
     },
-    IptalEt() {
-      //İPO BAK HELEEEEEEE
+    IptalEt(id, itemid) {
+      this.$axios
+        .delete("http://localhost:8000/orders/" + id + "/")
+        .then(response =>
+          this.$axios.delete("http://localhost:8000/orderitems/" + itemid + "/")
+        );
     }
   },
 
