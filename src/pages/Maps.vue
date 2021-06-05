@@ -71,8 +71,7 @@ export default {
         { text: "Ürün Sepet No", value: "order_item_id" },
         { text: "Stok No", value: "sub_product_id" },
         { text: "Düzenle", value: "action" }
-      ],
-      loaded: false
+      ]
     };
   },
   components: { VueTableDynamic },
@@ -105,7 +104,6 @@ export default {
             });
         });
       });
-      this.loaded = true;
     },
     currentDateTime() {
       const current = new Date();
