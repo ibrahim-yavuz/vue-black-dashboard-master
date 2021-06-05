@@ -108,10 +108,16 @@ export default {
 
     uyeOl() {
       this.$axios
-        .post("http://127.0.0.1:8000/customers/", {
-          name: this.kullanici_adi,
-          password: this.sifre,
-        })
+        .post(
+          "http://127.0.0.1:8000/customers/",
+          {
+            name: this.kullanici_adi,
+            password: this.sifre,
+          },
+          {
+            mode: "no-cors",
+          }
+        )
         .then((response) => console.log(response.data));
     },
   },

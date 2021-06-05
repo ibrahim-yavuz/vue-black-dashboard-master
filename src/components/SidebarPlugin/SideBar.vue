@@ -47,7 +47,7 @@ export default {
   props: {
     title: {
       type: String,
-      default: "Creative Tim",
+      default: "Panda A.Ş.",
     },
     backgroundColor: {
       type: String,
