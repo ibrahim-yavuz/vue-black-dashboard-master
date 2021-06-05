@@ -54,6 +54,8 @@ export default {
         { text: "Müşteri No", value: "customer_id" },
         { text: "Sipariş Tarihi", value: "order_date" },
         { text: "Son Teslim Tarihi", value: "deadline" },
+        { text: "Adet", value: "amount" },
+        { text: "Ürün No", value: "product_id" },
         { text: "Düzenle", value: "action" }
       ],
       loaded: false
@@ -68,6 +70,20 @@ export default {
         })
         .then(res => {
           this.desserts = res.data;
+          this.$axios
+            .get("http://127.0.0.1:8000/orderitems/", {
+              mode: "no-cors"
+            })
+            .then(res => {
+              for (let i = 0; i < res.data.length; i++) {
+                for (let j = 0; j < res.data.length; j++) {
+                  if (this.desserts[i].order_id == res.data[j].order_id) {
+                    this.desserts[i].amount = res.data[j].amount;
+                    this.desserts[i].product_id = res.data[j].product_id;
+                  }
+                }
+              }
+            });
         });
       this.loaded = true;
     },
