@@ -22,14 +22,24 @@
       ></v-text-field>
     </div>
     <div>
-      <v-btn @click="tiklama" class="ma-2 btn" tile color="secondary" dark>
+      <v-btn
+        @click="tiklamaMusteri"
+        class="ma-2 btn"
+        tile
+        color="secondary"
+        dark
+      >
         <v-icon left>mdi-login</v-icon>
         Müşteri Olarak Giriş Yap
       </v-btn>
 
-      <v-btn @click="tiklama" class="ma-2 btn" tile color="indigo" dark>
+      <v-btn @click="tiklamaSatici" class="ma-2 btn" tile color="indigo" dark>
         <v-icon left>mdi-login</v-icon>
         Satıcı Olarak Giriş Yap
+      </v-btn>
+      <v-btn @click="uyeOl" class="ma-2 btn" tile color="indigo" dark>
+        <v-icon left>mdi-account-plus</v-icon>
+        Üye Ol
       </v-btn>
     </div>
   </div>
@@ -46,7 +56,7 @@ export default {
     };
   },
   methods: {
-    tiklama() {
+    tiklamaMusteri() {
       let sayac = 0;
       let bulunduMu = false;
       this.$axios.get("http://localhost:8000/customers/").then((response) =>
@@ -57,6 +67,7 @@ export default {
             this.sifre == element["password"]
           ) {
             bulunduMu = true;
+            localStorage.setItem("user_type", "customer");
             localStorage.setItem("current_user", JSON.stringify(element));
             this.aktif_kullanici_id = JSON.parse(
               localStorage.getItem("current_user")
@@ -68,6 +79,40 @@ export default {
           }
         })
       );
+    },
+
+    tiklamaSatici() {
+      let sayac = 0;
+      let bulunduMu = false;
+      this.$axios.get("http://localhost:8000/users/").then((response) =>
+        response.data.forEach((element) => {
+          sayac++;
+          if (
+            this.kullanici_adi == element["name"] &&
+            this.sifre == element["password"]
+          ) {
+            bulunduMu = true;
+            localStorage.setItem("user_type", "user");
+            localStorage.setItem("current_user", JSON.stringify(element));
+            this.aktif_kullanici_id = JSON.parse(
+              localStorage.getItem("current_user")
+            );
+
+            this.$router.push({ name: "dashboard" });
+          } else if (sayac == response.data.length && !bulunduMu) {
+            this.$alert("Giriş Başarısız");
+          }
+        })
+      );
+    },
+
+    uyeOl() {
+      this.$axios
+        .post("http://127.0.0.1:8000/customers/", {
+          name: this.kullanici_adi,
+          password: this.sifre,
+        })
+        .then((response) => console.log(response.data));
     },
   },
   mounted() {},

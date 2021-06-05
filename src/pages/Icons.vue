@@ -130,7 +130,9 @@ export default {
   methods: {
     cikolataliAl() {
       if (this.cikolatali_adet >= 900 && this.cikolatali_adet < 90000) {
-        this.order2.customer_id = "31";
+        this.order2.customer_id = JSON.parse(
+          localStorage.getItem("current_user")
+        )["customer_id"];
         this.order2.order_date = this.currentDateTime();
         this.order2.deadline = this.mydate;
 
@@ -166,7 +168,9 @@ export default {
     },
     cilekliAl() {
       if (this.cilekli_adet >= 900 && this.cilekli_adet < 90000) {
-        this.order2.customer_id = "61";
+        this.order2.customer_id = JSON.parse(
+          localStorage.getItem("current_user")
+        )["customer_id"];
         this.order2.order_date = this.currentDateTime();
         this.order2.deadline = this.mydate;
 
@@ -202,7 +206,9 @@ export default {
     },
     muzluAl() {
       if (this.muzlu_adet >= 900 && this.muzlu_adet < 90000) {
-        this.order2.customer_id = "71";
+        this.order2.customer_id = JSON.parse(
+          localStorage.getItem("current_user")
+        )["customer_id"];
         this.order2.order_date = this.currentDateTime();
         this.order2.deadline = this.mydate;
 

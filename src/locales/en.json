@@ -120,6 +120,7 @@
     "userProfile": "Profil Ayarları",
     "tableList": "Stok Durumu",
     "typography": "Stok Ürün Ekle",
-    "login" : "Giriş Yap"
+    "login" : "Giriş Yap",
+    "logout" : "Çıkış Yap"
   }
 }
