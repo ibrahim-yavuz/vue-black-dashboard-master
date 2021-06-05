@@ -6,6 +6,7 @@
           <v-card-title>
             Sipariş Durumu
             <v-spacer></v-spacer>
+
             <v-text-field
               v-model="search"
               append-icon="mdi-magnify"
@@ -122,7 +123,11 @@ export default {
       this.$axios
         .delete("http://localhost:8000/orders/" + id + "/")
         .then(response =>
-          this.$axios.delete("http://localhost:8000/orderitems/" + itemid + "/")
+          this.$axios
+            .delete("http://localhost:8000/orderitems/" + itemid + "/")
+            .then(res => {
+              //this.$forceUpdate();
+            })
         );
     },
     IptalEt(id, itemid) {
