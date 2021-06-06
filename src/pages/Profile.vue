@@ -82,7 +82,7 @@ export default {
       ];
       this.$axios.get("http://127.0.0.1:8000/orders/").then(res => {
         this.desserts = res.data;
-        this.desserts = this.desserts.filter(e => e.customer_id != userid);
+        this.desserts = this.desserts.filter(e => e.customer_id == userid);
         this.$axios.get("http://127.0.0.1:8000/orderitems/").then(res => {
           for (let i = 0; i < this.desserts.length; i++) {
             for (let j = 0; j < res.data.length; j++) {
