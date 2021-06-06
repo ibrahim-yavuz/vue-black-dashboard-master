@@ -177,6 +177,7 @@ export default {
   },
   data() {
     return {
+      denemedata: [10, 34, 231, 70, 285, 60, 175, 560, 490, 580, 110, 780],
       bigLineChart: {
         allData: [[12, 54, 71, 35, 18, 98, 54, 91, 45, 38, 69, 82]],
         activeIndex: 0,
@@ -291,9 +292,10 @@ export default {
     }
   },
   methods: {
+    getA
     loadData() {
       this.bigLineChart.allData = [
-        [10, 34, 31, 70, 85, 60, 75, 60, 90, 80, 110, 100],
+        this.denemedata,
         [80, 120, 105, 110, 95, 105, 90, 100, 80, 95, 70, 120],
         [60, 80, 65, 130, 80, 105, 90, 130, 70, 115, 60, 130]
       ];
