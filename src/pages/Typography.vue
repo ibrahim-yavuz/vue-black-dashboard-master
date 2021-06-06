@@ -6,6 +6,7 @@
           <h5 class="card-category">Üretimi Yapılamayan Ürünlerimiz</h5>
           <h3 class="card-title">Stok Giriş Ekranı</h3>
         </div>
+
         <div class="card-body">
           <v-card>
             <v-card-title>
@@ -24,15 +25,27 @@
                 hide-details
               ></v-text-field>
             </v-card-title>
+
             <v-data-table
               :headers="headers"
               :items="desserts"
               :search="search"
+              :items-per-page="5"
               class="elevation-1"
             >
               <template v-slot:[`item.action`]="{ item }">
-                <v-btn icon large elevation="12" @click="ekle(item)">
-                  <v-icon>mdi-plus </v-icon>
+                <v-text-field
+                  v-model="editedamount"
+                  label="Adet"
+                  type="number"
+                  small
+                  counter
+                  maxlength="10"
+                  hint="Maksimum 10 Rakam Giriniz."
+                ></v-text-field>
+                <v-btn block @click="ekle(item)">
+                  Ekle
+                  <v-icon dark right>mdi-plus </v-icon>
                 </v-btn>
               </template>
             </v-data-table>
@@ -46,6 +59,7 @@
 export default {
   data() {
     return {
+      editedamount: 0,
       desserts: [],
       search: "",
       headers: [
@@ -63,6 +77,9 @@ export default {
     getApi() {
       this.$axios.get("http://127.0.0.1:8000/products/").then(res => {
         this.desserts = res.data;
+        this.desserts = this.desserts.filter(
+          item => item.product_type == "stok"
+        );
         this.$axios.get("http://127.0.0.1:8000/subproducttree/").then(res => {
           for (let i = 0; i < res.data.length; i++) {
             for (let j = 0; j < this.desserts.length; j++) {
@@ -75,7 +92,24 @@ export default {
         });
       });
     },
-    ekle(item) {},
+    ekle(selecteditem) {
+      var sum = 0;
+      if (this.editedamount > 0 && this.editedamount < 10000000000) {
+        sum = Number(this.editedamount) + Number(selecteditem.amount);
+        this.$axios.put(
+          "http://localhost:8000/subproducttree/" +
+            selecteditem.sub_product_id +
+            "/",
+          {
+            product_id: selecteditem.product_id,
+            amount: sum
+          }
+        );
+        this.$alert("Ürün Stoğa Eklendi.");
+      } else {
+        this.$alert("Geçerli Bir Adet Giriniz.");
+      }
+    },
     yenile() {
       this.$forceUpdate();
     }
