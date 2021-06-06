@@ -8,16 +8,17 @@
         </div>
 
         <div class="card-body">
-          <v-card>
+          <v-card dark>
             <v-card-title>
               Stok Ürünler
               <v-spacer>
-                <v-btn icon large elevation="12" @click="yenile()">
+                <v-btn icon large elevation="12" @click="yenile()" dark>
                   <v-icon>mdi-reload </v-icon>
                 </v-btn>
               </v-spacer>
 
               <v-text-field
+                dark
                 v-model="search"
                 append-icon="mdi-magnify"
                 label="Ara"
@@ -27,6 +28,7 @@
             </v-card-title>
 
             <v-data-table
+              dark
               :headers="headers"
               :items="desserts"
               :search="search"
