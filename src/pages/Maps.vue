@@ -58,7 +58,7 @@
 <script>
 import VueTableDynamic from "vue-table-dynamic";
 export default {
-  data: function() {
+  data: function () {
     return {
       splited: null,
       splitedDate: null,
@@ -72,9 +72,9 @@ export default {
         { text: "Adet", value: "amount" },
         { text: "Ürün No", value: "product_id" },
         { text: "Ürün Sepet No", value: "order_item_id" },
-        { text: "Düzenle", value: "action" }
+        { text: "Düzenle", value: "action" },
       ],
-      loaded: false
+      loaded: false,
     };
   },
   components: { VueTableDynamic },
@@ -82,15 +82,15 @@ export default {
     getArray() {
       this.$axios
         .get("http://127.0.0.1:8000/orders/", {
-          mode: "no-cors"
+          mode: "no-cors",
         })
-        .then(res => {
+        .then((res) => {
           this.desserts = res.data;
           this.$axios
             .get("http://127.0.0.1:8000/orderitems/", {
-              mode: "no-cors"
+              mode: "no-cors",
             })
-            .then(res => {
+            .then((res) => {
               for (let i = 0; i < res.data.length; i++) {
                 for (let j = 0; j < res.data.length; j++) {
                   if (this.desserts[i].order_id == res.data[j].order_id) {
@@ -126,27 +126,27 @@ export default {
     Onayla(id, itemid) {
       this.$axios
         .delete("http://localhost:8000/orders/" + id + "/")
-        .then(response =>
+        .then((response) =>
           this.$axios
             .delete("http://localhost:8000/orderitems/" + itemid + "/")
-            .then(res => {})
+            .then((res) => {})
         );
     },
     IptalEt(id, itemid) {
       this.$axios
         .delete("http://localhost:8000/orders/" + id + "/")
-        .then(response =>
+        .then((response) =>
           this.$axios.delete("http://localhost:8000/orderitems/" + itemid + "/")
         );
     },
     yenile() {
       this.$forceUpdate();
-    }
+    },
   },
 
   created() {
     this.getArray();
-  }
+  },
 };
 </script>
 <style scoped></style>

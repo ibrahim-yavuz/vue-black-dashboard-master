@@ -29,8 +29,8 @@ Vue.use(VueSimpleAlert);
 Vue.use(BlackDashboard);
 Vue.use(VueRouter);
 Vue.use(RouterPrefetch);
-
 Vue.prototype.$axios = axios;
+
 
 /* eslint-disable no-new */
 new Vue({
