@@ -168,7 +168,6 @@ import TaskList from "./Dashboard/TaskList";
 import UserTable from "./Dashboard/UserTable";
 import config from "@/config";
 
-
 export default {
   components: {
     LineChart,
@@ -351,7 +350,7 @@ export default {
       var data = fetch("http://127.0.0.1:8000/customers")
         .then(response => response.json())
         .then(data => (globalVar = data[0]["name"]));
-        console.log(globalVar);
+      console.log(globalVar);
     } catch (error) {
       console.log(error);
     }
