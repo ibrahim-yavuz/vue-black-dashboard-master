@@ -1,6 +1,6 @@
 <template>
   <card type="plain" title="Stoktakiler">
-    <div class="base-demo">
+    <div class="base-demo" v-if="loaded">
       <v-card dark>
         <v-card-title>
           Stok
@@ -42,8 +42,9 @@
 import { BaseTable } from "@/components";
 import VueTableDynamic from "vue-table-dynamic";
 export default {
-  data: function () {
+  data: function() {
     return {
+      loaded: false,
       desserts: [],
       search: "",
       headers: [
@@ -51,8 +52,8 @@ export default {
         { text: "Ürün İsmi", value: "product_name" },
         { text: "Ürün Tipi", value: "product_type" },
         { text: "Satılma Durumu", value: "is_salable" },
-        { text: "Adet", value: "amount" },
-      ],
+        { text: "Adet", value: "amount" }
+      ]
     };
   },
   components: { VueTableDynamic },
@@ -60,15 +61,15 @@ export default {
     getArray() {
       this.$axios
         .get("http://127.0.0.1:8000/products/", {
-          mode: "no-cors",
+          mode: "no-cors"
         })
-        .then((res) => {
+        .then(res => {
           this.desserts = res.data;
           this.$axios
             .get("http://127.0.0.1:8000/subproducttree/", {
-              mode: "no-cors",
+              mode: "no-cors"
             })
-            .then((res) => {
+            .then(res => {
               for (let i = 0; i < res.data.length; i++) {
                 for (let j = 0; j < res.data.length; j++) {
                   if (this.desserts[i].product_id == res.data[j].product_id) {
@@ -76,17 +77,18 @@ export default {
                   }
                 }
               }
+              this.loaded = true;
             });
         });
     },
     yenile() {
       this.$forceUpdate();
-    },
+    }
   },
 
   created() {
     this.getArray();
-  },
+  }
 };
 </script>
 <style></style>

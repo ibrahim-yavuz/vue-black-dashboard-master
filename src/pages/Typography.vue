@@ -7,7 +7,7 @@
           <h3 class="card-title">Stok Ürün Kayıt Sistemi</h3>
         </div>
 
-        <div class="card-body">
+        <div class="card-body" v-if="loaded">
           <v-card dark>
             <v-card-title>
               Stok Ürünler
@@ -61,6 +61,7 @@
 export default {
   data() {
     return {
+      loaded: false,
       editedamount: 0,
       desserts: [],
       search: "",
@@ -91,6 +92,7 @@ export default {
               }
             }
           }
+          this.loaded = true;
         });
       });
     },

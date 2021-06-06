@@ -1,6 +1,6 @@
 <template>
   <card type="plain" title="Siparişler">
-    <div class="base-demo">
+    <div class="base-demo" v-if="loaded">
       <template>
         <v-card dark>
           <v-card-title>
@@ -52,7 +52,7 @@
 <script>
 import VueTableDynamic from "vue-table-dynamic";
 export default {
-  data: function () {
+  data: function() {
     return {
       splited: null,
       message: " Numaralı Sipariş Silindi.",
@@ -68,9 +68,9 @@ export default {
         { text: "Adet", value: "amount" },
         { text: "Ürün No", value: "product_id" },
         { text: "Ürün Sepet No", value: "order_item_id" },
-        { text: "Düzenle", value: "action" },
+        { text: "Düzenle", value: "action" }
       ],
-      loaded: false,
+      loaded: false
     };
   },
   components: { VueTableDynamic },
@@ -78,15 +78,15 @@ export default {
     getArray() {
       this.$axios
         .get("http://127.0.0.1:8000/orders/", {
-          mode: "no-cors",
+          mode: "no-cors"
         })
-        .then((res) => {
+        .then(res => {
           this.desserts = res.data;
           this.$axios
             .get("http://127.0.0.1:8000/orderitems/", {
-              mode: "no-cors",
+              mode: "no-cors"
             })
-            .then((res) => {
+            .then(res => {
               for (let i = 0; i < this.desserts.length; i++) {
                 for (let j = 0; j < res.data.length; j++) {
                   if (this.desserts[i].order_id == res.data[j].order_id) {
@@ -98,12 +98,12 @@ export default {
               }
               this.$axios
                 .get("http://127.0.0.1:8000/subproducttree/")
-                .then((res) => {
+                .then(res => {
                   this.temp = res.data;
+                  this.loaded = true;
                 });
             });
         });
-      this.loaded = true;
     },
     currentDateTime() {
       const current = new Date();
@@ -136,10 +136,10 @@ export default {
                   "/",
                 {
                   product_id: item.product_id,
-                  amount: adet,
+                  amount: adet
                 }
               )
-              .then((res) => {
+              .then(res => {
                 this.IptalEt(item);
               });
           } else {
@@ -151,14 +151,14 @@ export default {
     IptalEt(item) {
       this.$axios
         .delete("http://localhost:8000/orders/" + item.order_id + "/")
-        .then((response) =>
+        .then(response =>
           this.$axios
             .delete(
               "http://localhost:8000/orderitems/" + item.order_item_id + "/"
             )
-            .then((res) => {
+            .then(res => {
               this.desserts = this.desserts.filter(
-                (e) => e.order_id != item.order_id
+                e => e.order_id != item.order_id
               );
               this.$alert(item.order_id + this.message);
               this.message = " Numaralı Spiariş Silindi. ";
@@ -167,12 +167,12 @@ export default {
     },
     yenile() {
       this.$forceUpdate();
-    },
+    }
   },
 
-  created() {
+  mounted() {
     this.getArray();
-  },
+  }
 };
 </script>
 <style scoped></style>
