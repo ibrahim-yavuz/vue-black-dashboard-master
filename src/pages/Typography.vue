@@ -69,18 +69,18 @@ export default {
         { text: "Satılma Durumu", value: "is_salable" },
         { text: "Stok No", value: "sub_product_id" },
         { text: "Adet", value: "amount" },
-        { text: "Ekle", value: "action" }
-      ]
+        { text: "Ekle", value: "action" },
+      ],
     };
   },
   methods: {
     getApi() {
-      this.$axios.get("http://127.0.0.1:8000/products/").then(res => {
+      this.$axios.get("http://127.0.0.1:8000/products/").then((res) => {
         this.desserts = res.data;
         this.desserts = this.desserts.filter(
-          item => item.product_type == "stok"
+          (item) => item.product_type == "stok"
         );
-        this.$axios.get("http://127.0.0.1:8000/subproducttree/").then(res => {
+        this.$axios.get("http://127.0.0.1:8000/subproducttree/").then((res) => {
           for (let i = 0; i < res.data.length; i++) {
             for (let j = 0; j < this.desserts.length; j++) {
               if (res.data[i].product_id == this.desserts[j].product_id) {
@@ -102,7 +102,7 @@ export default {
             "/",
           {
             product_id: selecteditem.product_id,
-            amount: sum
+            amount: sum,
           }
         );
         this.$alert("Ürün Stoğa Eklendi.");
@@ -112,11 +112,11 @@ export default {
     },
     yenile() {
       this.$forceUpdate();
-    }
+    },
   },
   created() {
     this.getApi();
-  }
+  },
 };
 </script>
 <style></style>

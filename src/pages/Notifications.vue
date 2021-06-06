@@ -4,16 +4,30 @@
       <card>
         <h4 slot="header">Üretim</h4>
         <v-data-table
+          dark
           :headers="headers"
           :items="items"
           class="elevation-1"
           @click:row="satirTiklama"
+          items-per-page="5"
         >
           <template v-slot:[`item.action`]="{ item }">
-            <v-btn icon large elevation="12" @click="item.user_id">
+            <v-btn icon large elevation="12" @click="uret(item)">
               <v-icon>mdi-plus </v-icon>
             </v-btn>
           </template>
+        </v-data-table>
+      </card>
+
+      <card>
+        <h4 slot="header">Makineler</h4>
+        <v-data-table
+          dark
+          :headers="makine_headers"
+          :items="makine_items"
+          class="elevation-1"
+          @click:row="makineSatirTiklama"
+        >
         </v-data-table>
       </card>
     </div>
@@ -22,6 +36,7 @@
 <script>
 import NotificationTemplate from "./Notifications/NotificationTemplate";
 import { BaseAlert } from "@/components";
+import GerekliUrunler from "./gerekli_urunler.js";
 
 export default {
   components: {
@@ -44,17 +59,43 @@ export default {
         { text: "Adet", value: "miktar" },
         { text: "Üret", value: "action" },
       ],
+      makine_items: [],
+      makine_headers: [
+        { text: "Makine ID", value: "work_center_id" },
+        { text: "Makine İsmi", value: "work_center_name" },
+        { text: "Durum", value: "active" },
+        { text: "Çalışma Süresi", value: "work_time" },
+      ],
     };
   },
   methods: {
     satirTiklama(value) {},
-    uret(id) {
-      this.$alert("Seçmiş olduğunuz satırın ID'si: " + id + " dir");
+    makineSatirTiklama(value) {
+      console.log(value.work_center_name);
+    },
+    uret(value) {
+      let gerekli_urun = null;
+
+      if (value.urun_tipi != "stok") {
+        gerekli_urun = GerekliUrunler.getUrun(value.urun_id);
+        console.log(gerekli_urun);
+      }
+
+      let bilgilendirme =
+        "Mevcut adedi: " + value.miktar + " - Üretmek için gereken ürün: ";
+
+      this.$prompt(
+        bilgilendirme,
+        "Üretmek istediğiniz miktar",
+        value.urun_ismi
+      ).then((text) => {});
     },
   },
   created() {
     let urun_url = "http://127.0.0.1:8000/products/";
     let alt_urun_url = "http://127.0.0.1:8000/subproducttree/";
+    let makine_url = "http://127.0.0.1:8000/workcenters/";
+
     this.$axios.get(urun_url).then((response) => {
       this.urun = response.data;
       this.$axios.get(alt_urun_url).then((response) => {
@@ -70,6 +111,16 @@ export default {
           });
         }
       });
+    });
+
+    this.$axios.get(makine_url).then((response) => {
+      for (let index = 0; index < response.data.length; index++) {
+        this.makine_items.push({
+          work_center_id: response.data[index].work_center_id,
+          work_center_name: response.data[index].work_center_name,
+          active: response.data[index].active,
+        });
+      }
     });
   },
 };

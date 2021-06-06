@@ -130,7 +130,9 @@ export default {
     },
   },
   mounted() {},
-  created() {},
+  created() {
+    localStorage.setItem("current_user", null);
+  },
 };
 </script>
 
