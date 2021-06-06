@@ -10,7 +10,7 @@
           @click:row="satirTiklama"
         >
           <template v-slot:[`item.action`]="{ item }">
-            <v-btn icon large elevation="12" @click="">
+            <v-btn icon large elevation="12" @click="item.user_id">
               <v-icon>mdi-plus </v-icon>
             </v-btn>
           </template>
