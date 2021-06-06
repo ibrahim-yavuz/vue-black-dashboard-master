@@ -25,6 +25,8 @@
             :items="desserts"
             :search="search"
             class="elevation-1"
+            loading
+            loading-text="Yükleniyor... Lütfen Bekleyiniz."
           >
             <template v-slot:[`item.deadline`]="{ item }">
               <v-chip outlined>
@@ -117,9 +119,7 @@ export default {
 
       return dateTime;
     },
-    onButtonClick(item) {
-      console.log("click on " + item.orderi_id);
-    },
+
     Onayla(item) {
       this.message = " Numaralı Spiariş Onaylandı. ";
       var adet = 0;
@@ -156,7 +156,7 @@ export default {
             )
             .then(res => {
               this.desserts = this.desserts.filter(
-                e => e.order_id !== item.order_id
+                e => e.order_id != item.order_id
               );
               this.$alert(item.order_id + this.message);
               this.message = " Numaralı Spiariş Silindi. ";

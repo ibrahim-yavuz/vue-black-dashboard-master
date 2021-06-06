@@ -75,26 +75,30 @@ export default {
       }
     };
   },
-  methods: {},
-  created() {
-    let orders_url = "http://127.0.0.1:8000/orders/";
-    let orderitems_url = "http://127.0.0.1:8000/orderitems/";
-    //let user = JSON.parse(localStorage.getItem("current_user").order_id,
-    this.$axios.get(orders_url).then(res => {
-      this.desserts = res.data;
-      //this.desserts.filter((e)=>e.order_id == res.data.order_id );
-      this.$axios.get(orders_url).then(res => {
-        for (let i = 0; i < res.data.length; i++) {
-          for (let j = 0; j < res.data.length; j++) {
-            if (this.desserts[i].order_id == res.data[j].order_id) {
-              this.desserts[i].amount = res.data[j].amount;
-              this.desserts[i].product_id = res.data[j].product_id;
-              this.desserts[i].order_item_id = res.data[j].order_item_id;
+  methods: {
+    getOrder() {
+      //var user=JSON.parse(localStorage.getItem("current_user").order_id;
+      this.$axios.get("http://127.0.0.1:8000/orders/").then(res => {
+        this.desserts = res.data;
+        this.$axios.get("http://127.0.0.1:8000/orderitems/").then(res => {
+          for (let i = 0; i < this.desserts.length; i++) {
+            for (let j = 0; j < res.data.length; j++) {
+              if (this.desserts[i].order_id == res.data[j].order_id) {
+                this.desserts[i].amount = res.data[j].amount;
+                this.desserts[i].product_id = res.data[j].product_id;
+                this.desserts[i].order_item_id = res.data[j].order_item_id;
+              }
             }
           }
-        }
+        });
       });
-    });
+    },
+    yenile() {
+      this.$forceUpdate();
+    }
+  },
+  created() {
+    this.getOrder();
   }
 };
 </script>
