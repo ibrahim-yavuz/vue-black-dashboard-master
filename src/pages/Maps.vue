@@ -6,7 +6,7 @@
           <v-card-title>
             Sipariş Durumu
             <v-spacer>
-              <v-btn icon large elevation="12" @click="yenile()">
+              <v-btn icon large @click="yenile()">
                 <v-icon>mdi-reload </v-icon>
               </v-btn>
             </v-spacer>
@@ -32,20 +32,10 @@
               </v-chip>
             </template>
             <template v-slot:[`item.action`]="{ item }">
-              <v-btn
-                icon
-                large
-                elevation="12"
-                @click="Onayla(item.order_id, item.order_item_id)"
-              >
+              <v-btn icon large @click="Onayla(item)">
                 <v-icon>mdi-check </v-icon>
               </v-btn>
-              <v-btn
-                icon
-                large
-                elevation="12"
-                @click="IptalEt(item.order_id, item.order_item_id)"
-              >
+              <v-btn icon large @click="IptalEt(item)">
                 <v-icon>mdi-delete </v-icon>
               </v-btn>
             </template>
@@ -58,11 +48,13 @@
 <script>
 import VueTableDynamic from "vue-table-dynamic";
 export default {
-  data: function () {
+  data: function() {
     return {
       splited: null,
+      message: " Numaralı Sipariş Silindi.",
       splitedDate: null,
       desserts: [],
+      temp: [],
       search: "",
       headers: [
         { text: "Sipariş No", value: "order_id" },
@@ -72,9 +64,9 @@ export default {
         { text: "Adet", value: "amount" },
         { text: "Ürün No", value: "product_id" },
         { text: "Ürün Sepet No", value: "order_item_id" },
-        { text: "Düzenle", value: "action" },
+        { text: "Düzenle", value: "action" }
       ],
-      loaded: false,
+      loaded: false
     };
   },
   components: { VueTableDynamic },
@@ -82,16 +74,16 @@ export default {
     getArray() {
       this.$axios
         .get("http://127.0.0.1:8000/orders/", {
-          mode: "no-cors",
+          mode: "no-cors"
         })
-        .then((res) => {
+        .then(res => {
           this.desserts = res.data;
           this.$axios
             .get("http://127.0.0.1:8000/orderitems/", {
-              mode: "no-cors",
+              mode: "no-cors"
             })
-            .then((res) => {
-              for (let i = 0; i < res.data.length; i++) {
+            .then(res => {
+              for (let i = 0; i < this.desserts.length; i++) {
                 for (let j = 0; j < res.data.length; j++) {
                   if (this.desserts[i].order_id == res.data[j].order_id) {
                     this.desserts[i].amount = res.data[j].amount;
@@ -100,6 +92,11 @@ export default {
                   }
                 }
               }
+              this.$axios
+                .get("http://127.0.0.1:8000/subproducttree/")
+                .then(res => {
+                  this.temp = res.data;
+                });
             });
         });
       this.loaded = true;
@@ -123,30 +120,57 @@ export default {
     onButtonClick(item) {
       console.log("click on " + item.orderi_id);
     },
-    Onayla(id, itemid) {
-      this.$axios
-        .delete("http://localhost:8000/orders/" + id + "/")
-        .then((response) =>
-          this.$axios
-            .delete("http://localhost:8000/orderitems/" + itemid + "/")
-            .then((res) => {})
-        );
+    Onayla(item) {
+      this.message = " Numaralı Spiariş Onaylandı. ";
+      var adet = 0;
+      for (let i = 0; i < this.temp.length; i++) {
+        if (item.product_id == this.temp[i].product_id) {
+          if (item.amount <= this.temp[i].amount) {
+            adet = Number(this.temp[i].amount - Number(item.amount));
+            this.$axios
+              .put(
+                "http://localhost:8000/subproducttree/" +
+                  this.temp[i].sub_product_id +
+                  "/",
+                {
+                  product_id: item.product_id,
+                  amount: adet
+                }
+              )
+              .then(res => {
+                this.IptalEt(item);
+              });
+          } else {
+            this.$alert("Spiariş İçin Yeterli Stok Yok.");
+          }
+        }
+      }
     },
-    IptalEt(id, itemid) {
+    IptalEt(item) {
       this.$axios
-        .delete("http://localhost:8000/orders/" + id + "/")
-        .then((response) =>
-          this.$axios.delete("http://localhost:8000/orderitems/" + itemid + "/")
+        .delete("http://localhost:8000/orders/" + item.order_id + "/")
+        .then(response =>
+          this.$axios
+            .delete(
+              "http://localhost:8000/orderitems/" + item.order_item_id + "/"
+            )
+            .then(res => {
+              this.desserts = this.desserts.filter(
+                e => e.order_id !== item.order_id
+              );
+              this.$alert(item.order_id + this.message);
+              this.message = " Numaralı Spiariş Silindi. ";
+            })
         );
     },
     yenile() {
       this.$forceUpdate();
-    },
+    }
   },
 
   created() {
     this.getArray();
-  },
+  }
 };
 </script>
 <style scoped></style>
