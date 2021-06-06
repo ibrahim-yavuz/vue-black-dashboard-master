@@ -3,21 +3,22 @@
     <div class="col-md-12">
       <div class="card">
         <div class="card-header mb-5">
-          <h5 class="card-category">Black Table Heading</h5>
-          <h3 class="card-title">Created using Poppins Font Family</h3>
+          <h5 class="card-category">Burada üretilemeyen ürünler gösterilir.</h5>
+          <h3 class="card-title">Stok Ürün Kayıt Sistemi</h3>
         </div>
 
         <div class="card-body">
-          <v-card>
+          <v-card dark>
             <v-card-title>
               Stok Ürünler
               <v-spacer>
-                <v-btn icon large elevation="12" @click="yenile()">
+                <v-btn icon large elevation="12" @click="yenile()" dark>
                   <v-icon>mdi-reload </v-icon>
                 </v-btn>
               </v-spacer>
 
               <v-text-field
+                dark
                 v-model="search"
                 append-icon="mdi-magnify"
                 label="Ara"
@@ -27,6 +28,7 @@
             </v-card-title>
 
             <v-data-table
+              dark
               :headers="headers"
               :items="desserts"
               :search="search"

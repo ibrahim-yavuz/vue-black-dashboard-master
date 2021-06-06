@@ -5,16 +5,17 @@
     </div>
     <card type="plain" title="Siparişler">
       <div class="base-demo">
-        <v-card>
+        <v-card dark>
           <v-card-title>
             Aktif Siparişlerim
             <v-spacer>
-              <v-btn icon large elevation="12" @click="yenile()">
+              <v-btn icon large elevation="12" @click="yenile()" dark>
                 <v-icon>mdi-reload </v-icon>
               </v-btn>
             </v-spacer>
             <v-text-field
               v-model="search"
+              dark
               append-icon="mdi-magnify"
               label="Ara"
               single-line
@@ -22,6 +23,7 @@
             ></v-text-field>
           </v-card-title>
           <v-data-table
+            dark
             :headers="headers"
             :items="desserts"
             :search="search"
@@ -47,7 +49,7 @@
 import EditProfileForm from "./Profile/EditProfileForm";
 export default {
   components: {
-    EditProfileForm
+    EditProfileForm,
   },
   data() {
     return {
@@ -60,7 +62,7 @@ export default {
         { text: "Son Teslim Tarihi", value: "deadline" },
         { text: "Sepet No", value: "order_item_id" },
         { text: "Ürün No", value: "product_id" },
-        { text: "Adet", value: "amount" }
+        { text: "Adet", value: "amount" },
       ],
       model: {
         company: "Creative Code Inc.",
@@ -72,8 +74,8 @@ export default {
         city: "Melbourne",
         country: "Australia",
         about:
-          "Lamborghini Mercy, Your chick she so thirsty, I'm in that two seat Lambo."
-      }
+          "Lamborghini Mercy, Your chick she so thirsty, I'm in that two seat Lambo.",
+      },
     };
   },
   methods: {
@@ -81,10 +83,10 @@ export default {
       var userid = JSON.parse(localStorage.getItem("current_user"))[
         "customer_id"
       ];
-      this.$axios.get("http://127.0.0.1:8000/orders/").then(res => {
+      this.$axios.get("http://127.0.0.1:8000/orders/").then((res) => {
         this.desserts = res.data;
-        this.desserts = this.desserts.filter(e => e.customer_id == userid);
-        this.$axios.get("http://127.0.0.1:8000/orderitems/").then(res => {
+        this.desserts = this.desserts.filter((e) => e.customer_id == userid);
+        this.$axios.get("http://127.0.0.1:8000/orderitems/").then((res) => {
           for (let i = 0; i < this.desserts.length; i++) {
             for (let j = 0; j < res.data.length; j++) {
               if (this.desserts[i].order_id == res.data[j].order_id) {
@@ -99,14 +101,14 @@ export default {
     },
     yenile() {
       this.$forceUpdate();
-    }
+    },
   },
   created() {
     if (localStorage.getItem("user_type") == "user") {
     } else if (localStorage.getItem("user_type") == "customer") {
       this.getOrder();
     }
-  }
+  },
 };
 </script>
 <style></style>
