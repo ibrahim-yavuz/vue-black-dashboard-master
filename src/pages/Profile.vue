@@ -27,7 +27,7 @@
             :search="search"
             class="elevation-1"
             loading
-            loading-text="Yükleniyor... Lütfen Bekleyiniz."
+            loading-text="Satıcı Girişi Yaptınız ya da Aktif Siparişiniz Yok."
           >
             <template v-slot:[`item.is_salable`]="{ item }">
               <v-simple-checkbox
@@ -77,9 +77,12 @@ export default {
   },
   methods: {
     getOrder() {
-      //var user=JSON.parse(localStorage.getItem("current_user").order_id;
+      var userid = JSON.parse(localStorage.getItem("current_user"))[
+        "customer_id"
+      ];
       this.$axios.get("http://127.0.0.1:8000/orders/").then(res => {
         this.desserts = res.data;
+        this.desserts = this.desserts.filter(e => e.customer_id != userid);
         this.$axios.get("http://127.0.0.1:8000/orderitems/").then(res => {
           for (let i = 0; i < this.desserts.length; i++) {
             for (let j = 0; j < res.data.length; j++) {
@@ -98,7 +101,10 @@ export default {
     }
   },
   created() {
-    this.getOrder();
+    if (localStorage.getItem("user_type") == "user") {
+    } else if (localStorage.getItem("user_type") == "customer") {
+      this.getOrder();
+    }
   }
 };
 </script>
