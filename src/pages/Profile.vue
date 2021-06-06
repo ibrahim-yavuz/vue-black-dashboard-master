@@ -25,6 +25,7 @@
             :headers="headers"
             :items="desserts"
             :search="search"
+            :items-per-page="5"
             class="elevation-1"
             loading
             loading-text="Satıcı Girişi Yaptınız ya da Aktif Siparişiniz Yok."
