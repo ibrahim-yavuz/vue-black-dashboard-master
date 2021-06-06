@@ -292,7 +292,7 @@ export default {
     }
   },
   methods: {
-    getA
+    getArray() {},
     loadData() {
       this.bigLineChart.allData = [
         this.denemedata,
