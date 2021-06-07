@@ -177,8 +177,8 @@ export default {
   },
   data() {
     return {
-      deneme: "oldi",
-      loadedOn: false,
+      customers: [],
+      orders: [],
       cikolataOn: [],
       cilekOn: [],
       muzOn: [],
@@ -312,7 +312,6 @@ export default {
           }
         }
         this.bigLineChart.allData = [this.cikolataOn, this.cilekOn, this.muzOn];
-        this.loadedOn = true;
       });
     },
     initBigChart(index) {
@@ -340,7 +339,37 @@ export default {
       this.bigLineChart.chartData = chartData;
       this.bigLineChart.activeIndex = index;
     },
-    getBar() {}
+    getBar() {
+      this.$axios.get("http://127.0.0.1:8000/customers/").then(res => {
+        this.customers = res.data;
+        for (let i = 0; i < this.customers.length; i++) {
+          this.customers[i].adet = 0;
+        }
+        this.$axios.get("http://127.0.0.1:8000/orders/").then(res => {
+          this.orders = res.data;
+          this.$axios.get("http://127.0.0.1:8000/orderitems/").then(res => {
+            for (let i = 0; i < this.orders.length; i++) {
+              for (let j = 0; j < res.data.length; j++) {
+                if (this.orders[i].order_id == res.data[j].order_id) {
+                  this.orders[i].amount = res.data[j].amount;
+                }
+              }
+            }
+            //--------------
+            for (let i = 0; i < this.orders.length; i++) {
+              for (let j = 0; j < this.customers.length; j++) {
+                if (
+                  this.customers[j].customer_id == this.orders[i].customer_id
+                ) {
+                  this.customers[j].adet += this.orders[i].amount;
+                }
+              }
+            }
+            console.log(this.customers);
+          });
+        });
+      });
+    }
   },
   mounted() {
     this.i18n = this.$i18n;
