@@ -31,7 +31,7 @@
             loading-text="Yükleniyor... Lütfen Bekleyiniz."
           >
             <template v-slot:[`item.deadline`]="{ item }">
-              <v-chip outlined>
+              <v-chip outlined v-bind:style="{ background: getColor(item) }">
                 {{ item.deadline }}
               </v-chip>
             </template>
@@ -105,6 +105,15 @@ export default {
             });
         });
     },
+    getColor(item) {
+      var curr = item.order_date.split("-").join("");
+      var dead = item.deadline.split("-").join("");
+      if (Number(dead) > Number(curr)) {
+        return "green !important";
+      } else {
+        return "red !important";
+      }
+    },
     currentDateTime() {
       const current = new Date();
       const day0 =
@@ -170,7 +179,7 @@ export default {
     }
   },
 
-  mounted() {
+  created() {
     this.getArray();
   }
 };

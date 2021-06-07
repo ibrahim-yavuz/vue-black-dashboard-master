@@ -7,10 +7,11 @@
             <div class="row">
               <div class="col-sm-6" :class="isRTL ? 'text-right' : 'text-left'">
                 <h5 class="card-category">
-                  {{ $t("dashboard.totalShipments") }}
+                  SON 10 SİPARİŞ
                 </h5>
-                <h2 class="card-title">{{ $t("dashboard.performance") }}</h2>
+                <h2 class="card-title">Sipariş Adeti</h2>
               </div>
+
               <div class="col-sm-6">
                 <div
                   class="btn-group btn-group-toggle"
@@ -177,9 +178,12 @@ export default {
   },
   data() {
     return {
-      denemedata: [10, 34, 231, 70, 285, 60, 175, 560, 490, 580, 110, 780],
+      loadedOn: false,
+      cikolataOn: [],
+      cilekOn: [],
+      muzOn: [],
       bigLineChart: {
-        allData: [[12, 54, 71, 35, 18, 98, 54, 91, 45, 38, 69, 82]],
+        allData: [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0]],
         activeIndex: 0,
         chartData: {
           datasets: [{}],
@@ -262,7 +266,7 @@ export default {
       blueBarChart: {
         extraOptions: chartConfigs.barChartOptions,
         chartData: {
-          labels: ["globalVar", "GER", "AUS", "UK", "RO", "BR"],
+          labels: ["A", "GER", "AUS", "UK", "RO", "BR"],
           datasets: [
             {
               label: "Countries",
@@ -292,13 +296,26 @@ export default {
     }
   },
   methods: {
-    getArray() {},
     loadData() {
-      this.bigLineChart.allData = [
-        this.denemedata,
-        [80, 120, 105, 110, 95, 105, 90, 100, 80, 95, 70, 120],
-        [60, 80, 65, 130, 80, 105, 90, 130, 70, 115, 60, 130]
-      ];
+      this.$axios.get("http://127.0.0.1:8000/orderitems/").then(res => {
+        for (let i = res.data.length - 1; i >= 0; i--) {
+          if (res.data[i].product_id == 20) {
+            if (this.cikolataOn.length < 10) {
+              this.cikolataOn.push(res.data[i].amount);
+            }
+          } else if (res.data[i].product_id == 21) {
+            if (this.cilekOn.length < 10) {
+              this.cilekOn.push(res.data[i].amount);
+            }
+          } else if (res.data[i].product_id == 22) {
+            if (this.muzOn.length < 10) {
+              this.muzOn.push(res.data[i].amount);
+            }
+          }
+        }
+        this.bigLineChart.allData = [this.cikolataOn, this.cilekOn, this.muzOn];
+        this.loadedOn = true;
+      });
     },
     initBigChart(index) {
       let chartData = {
@@ -329,9 +346,7 @@ export default {
           "TEMMUZ",
           "AĞUSTOS",
           "EYLÜL",
-          "EKİM",
-          "KASIM",
-          "ARALIK"
+          "EKİM"
         ]
       };
       this.$refs.bigChart.updateGradients(chartData);
