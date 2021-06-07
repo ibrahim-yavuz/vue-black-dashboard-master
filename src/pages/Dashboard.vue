@@ -336,18 +336,7 @@ export default {
             data: this.bigLineChart.allData[index]
           }
         ],
-        labels: [
-          "OCAK",
-          "ŞUBAT",
-          "MART",
-          "NİSAN",
-          "MAYIS",
-          "HAZİRAN",
-          "TEMMUZ",
-          "AĞUSTOS",
-          "EYLÜL",
-          "EKİM"
-        ]
+        labels: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
       };
       this.$refs.bigChart.updateGradients(chartData);
       this.bigLineChart.chartData = chartData;
