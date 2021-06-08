@@ -12,7 +12,7 @@
           :items-per-page="5"
         >
           <template v-slot:[`item.action`]="{ item }">
-            <v-btn icon large elevation="12" @click="uret(item)">
+            <v-btn icon large elevation="12" @click="uret(item.urun_id)">
               <v-icon>mdi-plus </v-icon>
             </v-btn>
           </template>
@@ -75,14 +75,27 @@ export default {
     },
     uret(value) {
       let dizi = [];
-      let altUrunler = Urunler.altUrunBul(value.urun_id);
+      let altUrunler = Urunler.altUrunBul(value);
+      console.log(altUrunler);
 
       for (let index = 0; index < altUrunler.length; index++) {
         this.$axios
-          .get(
-            "http://127.0.0.1:8000/subproducttree/" + altUrunler[index] + "/"
-          )
-          .then((response) => {});
+          .get("http://127.0.0.1:8000/subproducttree/")
+          .then((response) => {
+            response.data.forEach((element) => {
+              if (element.product_id == altUrunler[index]) {
+                //console.log(element.amount);
+                if (element.amount != 0) {
+                  dizi.push(element.amount);
+                } else {
+                  console.log(element.product_id);
+                  this.uret(element.product_id);
+                }
+
+                //console.log(Math.min(dizi));
+              }
+            });
+          });
       }
     },
   },
