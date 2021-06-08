@@ -99,9 +99,9 @@
       <div class="col-lg-4" :class="{ 'text-right': isRTL }">
         <card type="chart">
           <template slot="header">
-            <h5 class="card-category">{{ $t("dashboard.completedTasks") }}</h5>
+            <h5 class="card-category">Süresi Geçen Sipariş Sayısı</h5>
             <h3 class="card-title">
-              <i class="tim-icons icon-send text-success"></i> 12,100K
+              <i class="tim-icons icon-send text-success"></i> {{ toplamdate }}
             </h3>
           </template>
           <div class="chart-area">
@@ -136,9 +136,11 @@ export default {
   },
   data() {
     return {
+      totalgreen: [0, 0, 0, 0, 0, 0],
       totalpurple: [0, 0, 0, 0, 0, 0],
       totalorders: [],
       tempslit: [],
+      toplamdate: 0,
       toplamaltı: 0,
       loadpurple: false,
       loadbar: false,
@@ -188,7 +190,7 @@ export default {
       greenLineChart: {
         extraOptions: chartConfigs.greenChartOptions,
         chartData: {
-          labels: ["JUL", "AUG", "SEP", "OCT", "NOV"],
+          labels: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran"],
           datasets: [
             {
               label: "My First dataset",
@@ -204,7 +206,7 @@ export default {
               pointHoverRadius: 4,
               pointHoverBorderWidth: 15,
               pointRadius: 4,
-              data: [90, 27, 60, 12, 80]
+              data: [90, 27, 60, 12, 80, 7]
             }
           ]
         },
@@ -246,6 +248,9 @@ export default {
     }
   },
   methods: {
+    getGreen() {
+      this.$axios.get("http://127.0.0.1:8000/orders/").then(res => {});
+    },
     getPurple() {
       this.$axios.get("http://127.0.0.1:8000/orders/").then(res => {
         this.totalorders = res.data;
