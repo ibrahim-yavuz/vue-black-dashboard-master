@@ -57,12 +57,13 @@
       <div class="col-lg-4" :class="{ 'text-right': isRTL }">
         <card type="chart">
           <template slot="header">
-            <h5 class="card-category">{{ $t("dashboard.totalShipments") }}</h5>
+            <h5 class="card-category">SON 6 AY VERİLEN SİPARİŞLER</h5>
             <h3 class="card-title">
-              <i class="tim-icons icon-bell-55 text-primary"></i> 763,215
+              <i class="tim-icons icon-bell-55 text-primary"></i>
+              {{ toplamaltı }}
             </h3>
           </template>
-          <div class="chart-area">
+          <div class="chart-area" v-if="loadpurple">
             <line-chart
               style="height: 100%"
               chart-id="purple-line-chart"
@@ -178,6 +179,11 @@ export default {
   },
   data() {
     return {
+      totalpurple: [0, 0, 0, 0, 0, 0],
+      totalorders: [],
+      tempslit: [],
+      toplamaltı: 0,
+      loadpurple: false,
       loadbar: false,
       customers: [],
       orders: [],
@@ -199,10 +205,10 @@ export default {
       purpleLineChart: {
         extraOptions: chartConfigs.purpleChartOptions,
         chartData: {
-          labels: ["TEMMUZ", "AĞUSTOS", "SEP", "OCT", "NOV", "DEC"],
+          labels: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran"],
           datasets: [
             {
-              label: "Data",
+              label: "Toplam",
               fill: true,
               borderColor: config.colors.primary,
               borderWidth: 2,
@@ -283,6 +289,42 @@ export default {
     }
   },
   methods: {
+    getPurple() {
+      this.$axios.get("http://127.0.0.1:8000/orders/").then(res => {
+        this.totalorders = res.data;
+        for (let i = 0; i < this.customers.length; i++) {
+          this.customers[i].amount = 0;
+        }
+        this.$axios.get("http://127.0.0.1:8000/orderitems/").then(res => {
+          for (let i = 0; i < this.totalorders.length; i++) {
+            for (let j = 0; j < res.data.length; j++) {
+              if (this.totalorders[i].order_id == res.data[j].order_id) {
+                this.totalorders[i].amount = res.data[j].amount;
+              }
+            }
+          }
+          for (let i = 0; i < this.totalorders.length; i++) {
+            this.temp = this.totalorders[i].order_date.split("-");
+            this.toplamaltı += this.totalorders[i].amount;
+            if (this.temp[1] == "01") {
+              this.totalpurple[0] += this.totalorders[i].amount;
+            } else if (this.temp[1] == "02") {
+              this.totalpurple[1] += this.totalorders[i].amount;
+            } else if (this.temp[1] == "03") {
+              this.totalpurple[2] += this.totalorders[i].amount;
+            } else if (this.temp[1] == "04") {
+              this.totalpurple[3] += this.totalorders[i].amount;
+            } else if (this.temp[1] == "05") {
+              this.totalpurple[4] += this.totalorders[i].amount;
+            } else if (this.temp[1] == "06") {
+              this.totalpurple[5] += this.totalorders[i].amount;
+            }
+            this.purpleLineChart.chartData.datasets[0].data = this.totalpurple;
+            this.loadpurple = true;
+          }
+        });
+      });
+    },
     loadData() {
       this.$axios.get("http://127.0.0.1:8000/orderitems/").then(res => {
         for (let i = res.data.length - 1; i >= 0; i--) {
@@ -387,6 +429,7 @@ export default {
     this.initBigChart(0);
   },
   created() {
+    this.getPurple();
     this.getBar();
     try {
       var data = fetch("http://127.0.0.1:8000/customers")
