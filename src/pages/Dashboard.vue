@@ -88,7 +88,6 @@
               style="height: 100%"
               chart-id="blue-bar-chart"
               :chart-data="blueBarChart.chartData"
-              :gradient-stops="blueBarChart.gradientStops"
               :extra-options="blueBarChart.extraOptions"
             >
             </bar-chart>
@@ -178,6 +177,7 @@ export default {
   },
   data() {
     return {
+      deneme: "oldi",
       loadedOn: false,
       cikolataOn: [],
       cilekOn: [],
@@ -266,21 +266,19 @@ export default {
       blueBarChart: {
         extraOptions: chartConfigs.barChartOptions,
         chartData: {
-          labels: ["A", "GER", "AUS", "UK", "RO", "BR"],
+          labels: ["a", "b", "c", "d", "e", "f"],
           datasets: [
             {
-              label: "Countries",
-              fill: true,
+              label: "Toplam Adet",
               borderColor: config.colors.info,
               borderWidth: 2,
               borderDash: [],
               borderDashOffset: 0.0,
-              data: [53, 20, 10, 80, 100, 45]
+              data: [5, 8, 9, 1, 5, 3]
             }
           ]
         },
-        gradientColors: config.colors.primaryGradient,
-        gradientStops: [1, 0.4, 0]
+        gradientColors: config.colors.primaryGradient
       }
     };
   },
@@ -336,23 +334,13 @@ export default {
             data: this.bigLineChart.allData[index]
           }
         ],
-        labels: [
-          "OCAK",
-          "ŞUBAT",
-          "MART",
-          "NİSAN",
-          "MAYIS",
-          "HAZİRAN",
-          "TEMMUZ",
-          "AĞUSTOS",
-          "EYLÜL",
-          "EKİM"
-        ]
+        labels: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
       };
       this.$refs.bigChart.updateGradients(chartData);
       this.bigLineChart.chartData = chartData;
       this.bigLineChart.activeIndex = index;
-    }
+    },
+    getBar() {}
   },
   mounted() {
     this.i18n = this.$i18n;
@@ -363,6 +351,7 @@ export default {
     this.initBigChart(0);
   },
   created() {
+    this.getBar();
     try {
       var data = fetch("http://127.0.0.1:8000/customers")
         .then(response => response.json())
@@ -373,6 +362,8 @@ export default {
     }
     this.loadData();
   },
+
+  update() {},
   beforeDestroy() {
     if (this.$rtl.isRTL) {
       this.i18n.locale = "en";
