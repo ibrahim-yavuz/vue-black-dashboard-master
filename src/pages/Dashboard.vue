@@ -80,7 +80,8 @@
           <template slot="header">
             <h5 class="card-category">EN ÇOK SİPARİŞ VERENLER</h5>
             <h3 class="card-title">
-              <i class="tim-icons icon-delivery-fast text-info"></i> 6 MÜŞTERİ
+              <i class="tim-icons icon-delivery-fast text-info"></i>
+              Müşterilerin Toplam Sipariş Miktarları
             </h3>
           </template>
           <div class="chart-area" v-if="loadbar">
