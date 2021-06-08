@@ -57,12 +57,13 @@
       <div class="col-lg-4" :class="{ 'text-right': isRTL }">
         <card type="chart">
           <template slot="header">
-            <h5 class="card-category">{{ $t("dashboard.totalShipments") }}</h5>
+            <h5 class="card-category">SON 6 AY VERİLEN SİPARİŞLER</h5>
             <h3 class="card-title">
-              <i class="tim-icons icon-bell-55 text-primary"></i> 763,215
+              <i class="tim-icons icon-bell-55 text-primary"></i>
+              {{ toplamaltı }}
             </h3>
           </template>
-          <div class="chart-area">
+          <div class="chart-area" v-if="loadpurple">
             <line-chart
               style="height: 100%"
               chart-id="purple-line-chart"
@@ -78,12 +79,13 @@
       <div class="col-lg-4" :class="{ 'text-right': isRTL }">
         <card type="chart">
           <template slot="header">
-            <h5 class="card-category">{{ $t("dashboard.dailySales") }}</h5>
+            <h5 class="card-category">EN ÇOK SİPARİŞ VERENLER</h5>
             <h3 class="card-title">
-              <i class="tim-icons icon-delivery-fast text-info"></i> 3,500€
+              <i class="tim-icons icon-delivery-fast text-info"></i>
+              Müşterilerin Toplam Sipariş Miktarları
             </h3>
           </template>
-          <div class="chart-area">
+          <div class="chart-area" v-if="loadbar">
             <bar-chart
               style="height: 100%"
               chart-id="blue-bar-chart"
@@ -177,8 +179,14 @@ export default {
   },
   data() {
     return {
-      deneme: "oldi",
-      loadedOn: false,
+      totalpurple: [0, 0, 0, 0, 0, 0],
+      totalorders: [],
+      tempslit: [],
+      toplamaltı: 0,
+      loadpurple: false,
+      loadbar: false,
+      customers: [],
+      orders: [],
       cikolataOn: [],
       cilekOn: [],
       muzOn: [],
@@ -187,20 +195,7 @@ export default {
         activeIndex: 0,
         chartData: {
           datasets: [{}],
-          labels: [
-            "OCAK",
-            "ŞUBAT",
-            "MART",
-            "NİSAN",
-            "MAYIS",
-            "HAZİRAN",
-            "TEMMUZ",
-            "AĞUSTOS",
-            "EYLÜL",
-            "EKİM",
-            "KASIM",
-            "ARALIK"
-          ]
+          labels: ["-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"]
         },
         extraOptions: chartConfigs.purpleChartOptions,
         gradientColors: config.colors.primaryGradient,
@@ -210,18 +205,18 @@ export default {
       purpleLineChart: {
         extraOptions: chartConfigs.purpleChartOptions,
         chartData: {
-          labels: ["TEMMUZ", "AĞUSTOS", "SEP", "OCT", "NOV", "DEC"],
+          labels: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran"],
           datasets: [
             {
-              label: "Data",
+              label: "Toplam",
               fill: true,
-              borderColor: config.colors.primary,
+              borderColor: config.colors.danger,
               borderWidth: 2,
               borderDash: [],
               borderDashOffset: 0.0,
-              pointBackgroundColor: config.colors.primary,
+              pointBackgroundColor: config.colors.danger,
               pointBorderColor: "rgba(255,255,255,0)",
-              pointHoverBackgroundColor: config.colors.primary,
+              pointHoverBackgroundColor: config.colors.danger,
               pointBorderWidth: 20,
               pointHoverRadius: 4,
               pointHoverBorderWidth: 15,
@@ -241,13 +236,13 @@ export default {
             {
               label: "My First dataset",
               fill: true,
-              borderColor: config.colors.danger,
+              borderColor: config.colors.primary,
               borderWidth: 2,
               borderDash: [],
               borderDashOffset: 0.0,
-              pointBackgroundColor: config.colors.danger,
+              pointBackgroundColor: config.colors.primary,
               pointBorderColor: "rgba(255,255,255,0)",
-              pointHoverBackgroundColor: config.colors.danger,
+              pointHoverBackgroundColor: config.colors.primary,
               pointBorderWidth: 20,
               pointHoverRadius: 4,
               pointHoverBorderWidth: 15,
@@ -294,6 +289,42 @@ export default {
     }
   },
   methods: {
+    getPurple() {
+      this.$axios.get("http://127.0.0.1:8000/orders/").then(res => {
+        this.totalorders = res.data;
+        for (let i = 0; i < this.customers.length; i++) {
+          this.customers[i].amount = 0;
+        }
+        this.$axios.get("http://127.0.0.1:8000/orderitems/").then(res => {
+          for (let i = 0; i < this.totalorders.length; i++) {
+            for (let j = 0; j < res.data.length; j++) {
+              if (this.totalorders[i].order_id == res.data[j].order_id) {
+                this.totalorders[i].amount = res.data[j].amount;
+              }
+            }
+          }
+          for (let i = 0; i < this.totalorders.length; i++) {
+            this.temp = this.totalorders[i].order_date.split("-");
+            this.toplamaltı += this.totalorders[i].amount;
+            if (this.temp[1] == "01") {
+              this.totalpurple[0] += this.totalorders[i].amount;
+            } else if (this.temp[1] == "02") {
+              this.totalpurple[1] += this.totalorders[i].amount;
+            } else if (this.temp[1] == "03") {
+              this.totalpurple[2] += this.totalorders[i].amount;
+            } else if (this.temp[1] == "04") {
+              this.totalpurple[3] += this.totalorders[i].amount;
+            } else if (this.temp[1] == "05") {
+              this.totalpurple[4] += this.totalorders[i].amount;
+            } else if (this.temp[1] == "06") {
+              this.totalpurple[5] += this.totalorders[i].amount;
+            }
+            this.purpleLineChart.chartData.datasets[0].data = this.totalpurple;
+            this.loadpurple = true;
+          }
+        });
+      });
+    },
     loadData() {
       this.$axios.get("http://127.0.0.1:8000/orderitems/").then(res => {
         for (let i = res.data.length - 1; i >= 0; i--) {
@@ -312,7 +343,6 @@ export default {
           }
         }
         this.bigLineChart.allData = [this.cikolataOn, this.cilekOn, this.muzOn];
-        this.loadedOn = true;
       });
     },
     initBigChart(index) {
@@ -340,7 +370,55 @@ export default {
       this.bigLineChart.chartData = chartData;
       this.bigLineChart.activeIndex = index;
     },
-    getBar() {}
+    getBar() {
+      this.$axios.get("http://127.0.0.1:8000/customers/").then(res => {
+        this.customers = res.data;
+        for (let i = 0; i < this.customers.length; i++) {
+          this.customers[i].adet = 0;
+        }
+        this.$axios.get("http://127.0.0.1:8000/orders/").then(res => {
+          this.orders = res.data;
+          this.$axios.get("http://127.0.0.1:8000/orderitems/").then(res => {
+            for (let i = 0; i < this.orders.length; i++) {
+              for (let j = 0; j < res.data.length; j++) {
+                if (this.orders[i].order_id == res.data[j].order_id) {
+                  this.orders[i].amount = res.data[j].amount;
+                }
+              }
+            }
+            //--------------
+            for (let i = 0; i < this.orders.length; i++) {
+              for (let j = 0; j < this.customers.length; j++) {
+                if (
+                  this.customers[j].customer_id == this.orders[i].customer_id
+                ) {
+                  this.customers[j].adet += this.orders[i].amount;
+                }
+              }
+            }
+
+            this.customers.sort((a, b) => (a.adet < b.adet ? 1 : -1));
+            this.blueBarChart.chartData.labels = [
+              this.customers[0].name,
+              this.customers[1].name,
+              this.customers[2].name,
+              this.customers[3].name,
+              this.customers[4].name,
+              this.customers[5].name
+            ];
+            this.blueBarChart.chartData.datasets[0].data = [
+              this.customers[0].adet,
+              this.customers[1].adet,
+              this.customers[2].adet,
+              this.customers[3].adet,
+              this.customers[4].adet,
+              this.customers[5].adet
+            ];
+            this.loadbar = true;
+          });
+        });
+      });
+    }
   },
   mounted() {
     this.i18n = this.$i18n;
@@ -351,6 +429,7 @@ export default {
     this.initBigChart(0);
   },
   created() {
+    this.getPurple();
     this.getBar();
     try {
       var data = fetch("http://127.0.0.1:8000/customers")
