@@ -102,17 +102,17 @@ import muzlu from "./icons/muzlu_dondurma.png";
 import yakinda from "./icons/yakinda.png";
 import Urunler from "./urunler.js";
 export default {
-  data: function() {
+  data: function () {
     return {
       order2: {
         customer_id: null,
         order_date: null,
-        deadline: null
+        deadline: null,
       },
       orderitems2: {
         order_id: null,
         product_id: null,
-        amount: null
+        amount: null,
       },
       cikolatali: cikolatali,
       cilekli: cilekli,
@@ -123,7 +123,7 @@ export default {
       muzlu_adet: 0,
       mydate: "2021-6-16",
       myenddate: "2022-2-22",
-      value: null
+      value: null,
     };
   },
 
@@ -141,14 +141,14 @@ export default {
 
         this.$axios
           .post("http://127.0.0.1:8000/orders/", this.order2, {
-            mode: "no-cors"
+            mode: "no-cors",
           })
-          .then(response => {
+          .then((response) => {
             this.$axios
               .get("http://127.0.0.1:8000/orders/", {
-                mode: "no-cors"
+                mode: "no-cors",
               })
-              .then(response => {
+              .then((response) => {
                 this.value = response.data[response.data.length - 1];
                 this.orderitems2.order_id = this.value.order_id;
                 this.$axios.post(
@@ -181,14 +181,14 @@ export default {
 
         this.$axios
           .post("http://127.0.0.1:8000/orders/", this.order2, {
-            mode: "no-cors"
+            mode: "no-cors",
           })
-          .then(response => {
+          .then((response) => {
             this.$axios
               .get("http://127.0.0.1:8000/orders/", {
-                mode: "no-cors"
+                mode: "no-cors",
               })
-              .then(response => {
+              .then((response) => {
                 this.value = response.data[response.data.length - 1];
                 this.orderitems2.order_id = this.value.order_id;
                 this.$axios.post(
@@ -221,14 +221,14 @@ export default {
 
         this.$axios
           .post("http://127.0.0.1:8000/orders/", this.order2, {
-            mode: "no-cors"
+            mode: "no-cors",
           })
-          .then(response => {
+          .then((response) => {
             this.$axios
               .get("http://127.0.0.1:8000/orders/", {
-                mode: "no-cors"
+                mode: "no-cors",
               })
-              .then(response => {
+              .then((response) => {
                 this.value = response.data[response.data.length - 1];
                 this.orderitems2.order_id = this.value.order_id;
                 this.$axios.post(
@@ -282,14 +282,14 @@ export default {
 
       return dateTime;
     },
-    getUnits: function() {
+    getUnits: function () {
       this.mydate = this.DeadDateTime();
       this.myenddate = this.DeadDateTime();
-    }
+    },
   },
   beforeMount() {
     this.getUnits();
-  }
+  },
 };
 </script>
 <style scoped>

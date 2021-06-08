@@ -9,7 +9,7 @@
           :items="items"
           class="elevation-1"
           @click:row="satirTiklama"
-          items-per-page="5"
+          :items-per-page="5"
         >
           <template v-slot:[`item.action`]="{ item }">
             <v-btn icon large elevation="12" @click="uret(item)">
@@ -36,7 +36,6 @@
 <script>
 import NotificationTemplate from "./Notifications/NotificationTemplate";
 import { BaseAlert } from "@/components";
-import GerekliUrunler from "./gerekli_urunler.js";
 
 export default {
   components: {
@@ -73,23 +72,8 @@ export default {
     makineSatirTiklama(value) {
       console.log(value.work_center_name);
     },
-    uret(value) {
-      let gerekli_urun = null;
-
-      if (value.urun_tipi != "stok") {
-        gerekli_urun = GerekliUrunler.getUrun(value.urun_id);
-        console.log(gerekli_urun);
-      }
-
-      let bilgilendirme =
-        "Mevcut adedi: " + value.miktar + " - Üretmek için gereken ürün: ";
-
-      this.$prompt(
-        bilgilendirme,
-        "Üretmek istediğiniz miktar",
-        value.urun_ismi
-      ).then((text) => {});
-    },
+    altUrunUret(urun_id) {},
+    uret(value) {},
   },
   created() {
     let urun_url = "http://127.0.0.1:8000/products/";
