@@ -78,12 +78,12 @@
       <div class="col-lg-4" :class="{ 'text-right': isRTL }">
         <card type="chart">
           <template slot="header">
-            <h5 class="card-category">{{ $t("dashboard.dailySales") }}</h5>
+            <h5 class="card-category">EN ÇOK SİPARİŞ VERENLER</h5>
             <h3 class="card-title">
-              <i class="tim-icons icon-delivery-fast text-info"></i> 3,500€
+              <i class="tim-icons icon-delivery-fast text-info"></i> 6 MÜŞTERİ
             </h3>
           </template>
-          <div class="chart-area">
+          <div class="chart-area" v-if="loadbar">
             <bar-chart
               style="height: 100%"
               chart-id="blue-bar-chart"
@@ -177,6 +177,7 @@ export default {
   },
   data() {
     return {
+      loadbar: false,
       customers: [],
       orders: [],
       cikolataOn: [],
@@ -187,20 +188,7 @@ export default {
         activeIndex: 0,
         chartData: {
           datasets: [{}],
-          labels: [
-            "OCAK",
-            "ŞUBAT",
-            "MART",
-            "NİSAN",
-            "MAYIS",
-            "HAZİRAN",
-            "TEMMUZ",
-            "AĞUSTOS",
-            "EYLÜL",
-            "EKİM",
-            "KASIM",
-            "ARALIK"
-          ]
+          labels: ["-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-", "-"]
         },
         extraOptions: chartConfigs.purpleChartOptions,
         gradientColors: config.colors.primaryGradient,
@@ -365,7 +353,25 @@ export default {
                 }
               }
             }
-            console.log(this.customers);
+
+            this.customers.sort((a, b) => (a.adet < b.adet ? 1 : -1));
+            this.blueBarChart.chartData.labels = [
+              this.customers[0].name,
+              this.customers[1].name,
+              this.customers[2].name,
+              this.customers[3].name,
+              this.customers[4].name,
+              this.customers[5].name
+            ];
+            this.blueBarChart.chartData.datasets[0].data = [
+              this.customers[0].adet,
+              this.customers[1].adet,
+              this.customers[2].adet,
+              this.customers[3].adet,
+              this.customers[4].adet,
+              this.customers[5].adet
+            ];
+            this.loadbar = true;
           });
         });
       });
