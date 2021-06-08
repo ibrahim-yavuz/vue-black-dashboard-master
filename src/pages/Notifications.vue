@@ -36,6 +36,7 @@
 <script>
 import NotificationTemplate from "./Notifications/NotificationTemplate";
 import { BaseAlert } from "@/components";
+import Urunler from "./gerekli_urunler.js";
 
 export default {
   components: {
@@ -72,8 +73,18 @@ export default {
     makineSatirTiklama(value) {
       console.log(value.work_center_name);
     },
-    altUrunUret(urun_id) {},
-    uret(value) {},
+    uret(value) {
+      let dizi = [];
+      let altUrunler = Urunler.altUrunBul(value.urun_id);
+
+      for (let index = 0; index < altUrunler.length; index++) {
+        this.$axios
+          .get(
+            "http://127.0.0.1:8000/subproducttree/" + altUrunler[index] + "/"
+          )
+          .then((response) => {});
+      }
+    },
   },
   created() {
     let urun_url = "http://127.0.0.1:8000/products/";
