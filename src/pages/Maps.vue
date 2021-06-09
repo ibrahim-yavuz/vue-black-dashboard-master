@@ -106,7 +106,9 @@ export default {
         });
     },
     getColor(item) {
-      var curr = item.order_date.split("-").join("");
+      var curr = this.currentDateTime()
+        .split("-")
+        .join("");
       var dead = item.deadline.split("-").join("");
       if (Number(dead) > Number(curr)) {
         return "green !important";
