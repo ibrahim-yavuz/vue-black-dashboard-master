@@ -60,7 +60,7 @@
                 <p class="d-lg-none">Çıkış</p>
               </a>
               <li class="nav-link">
-                <a href="#" class="nav-item dropdown-item">Profil</a>
+                <a href="#/profile" class="nav-item dropdown-item">Profil</a>
               </li>
               <div class="dropdown-divider"></div>
               <li class="nav-link">
@@ -82,7 +82,7 @@ import Modal from "@/components/Modal";
 export default {
   components: {
     CollapseTransition,
-    Modal,
+    Modal
   },
   computed: {
     routeName() {
@@ -91,14 +91,14 @@ export default {
     },
     isRTL() {
       return this.$rtl.isRTL;
-    },
+    }
   },
   data() {
     return {
       activeNotifications: false,
       showMenu: false,
       searchModalVisible: false,
-      searchQuery: "",
+      searchQuery: ""
     };
   },
   methods: {
@@ -122,9 +122,8 @@ export default {
     },
     cikis() {
       this.$router.push("login");
-    },
-  },
+    }
+  }
 };
 </script>
-<style>
-</style>
+<style></style>

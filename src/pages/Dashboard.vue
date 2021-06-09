@@ -104,7 +104,7 @@
               <i class="tim-icons icon-send text-success"></i> {{ toplamdate }}
             </h3>
           </template>
-          <div class="chart-area">
+          <div class="chart-area" v-if="loadgreen">
             <line-chart
               style="height: 100%"
               chart-id="green-line-chart"
@@ -142,6 +142,7 @@ export default {
       tempslit: [],
       toplamdate: 0,
       toplamaltı: 0,
+      loadgreen: false,
       loadpurple: false,
       loadbar: false,
       customers: [],
@@ -193,7 +194,7 @@ export default {
           labels: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran"],
           datasets: [
             {
-              label: "My First dataset",
+              label: "Süresi Geçen",
               fill: true,
               borderColor: config.colors.primary,
               borderWidth: 2,
@@ -206,7 +207,7 @@ export default {
               pointHoverRadius: 4,
               pointHoverBorderWidth: 15,
               pointRadius: 4,
-              data: [90, 27, 60, 12, 80, 7]
+              data: [0, 0, 0, 0, 0, 0]
             }
           ]
         },
@@ -249,7 +250,41 @@ export default {
   },
   methods: {
     getGreen() {
-      this.$axios.get("http://127.0.0.1:8000/orders/").then(res => {});
+      var tempGreen = [];
+      var ay = [0, 0, 0, 0, 0, 0];
+      var toplam = 0;
+      this.$axios.get("http://127.0.0.1:8000/orders/").then(res => {
+        for (let i = 0; i < res.data.length; i++) {
+          tempGreen = res.data[i].order_date.split("-");
+          if (
+            this.currentDateTime()
+              .split("-")
+              .join("") >= res.data[i].deadline.split("-").join("")
+          ) {
+            if (tempGreen[1] == "01") {
+              ay[0]++;
+            } else if (tempGreen[1] == "02") {
+              ay[1]++;
+            } else if (tempGreen[1] == "03") {
+              ay[2]++;
+            } else if (tempGreen[1] == "04") {
+              ay[3]++;
+            } else if (tempGreen[1] == "05") {
+              ay[4]++;
+            } else if (tempGreen[1] == "06") {
+              ay[5]++;
+            }
+          }
+        }
+        for (let i = 0; i < 6; i++) {
+          toplam += ay[i];
+        }
+
+        this.toplamdate = toplam;
+        this.greenLineChart.chartData.datasets[0].data = ay;
+        console.log(this.greenLineChart.chartData.datasets[0].data);
+        this.loadgreen = true;
+      });
     },
     getPurple() {
       this.$axios.get("http://127.0.0.1:8000/orders/").then(res => {
@@ -380,6 +415,22 @@ export default {
           });
         });
       });
+    },
+    currentDateTime() {
+      const current = new Date();
+      const day0 =
+        current.getDate() < 10 ? "0" + current.getDate() : current.getDate();
+
+      const month0 =
+        current.getMonth() + 1 < 10
+          ? "0" + (current.getMonth() + 1)
+          : current.getMonth() + 1;
+
+      const date = current.getFullYear() + "-" + month0 + "-" + day0;
+
+      const dateTime = date;
+
+      return dateTime;
     }
   },
   mounted() {
@@ -393,15 +444,8 @@ export default {
   created() {
     this.getPurple();
     this.getBar();
-    try {
-      var data = fetch("http://127.0.0.1:8000/customers")
-        .then(response => response.json())
-        .then(data => (globalVar = data[0]["name"]));
-      console.log(globalVar);
-    } catch (error) {
-      console.log(error);
-    }
     this.loadData();
+    this.getGreen();
   },
 
   update() {},
