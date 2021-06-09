@@ -63,7 +63,8 @@ export default {
         { text: "Son Teslim Tarihi", value: "deadline" },
         { text: "Sepet No", value: "order_item_id" },
         { text: "Ürün No", value: "product_id" },
-        { text: "Adet", value: "amount" }
+        { text: "Adet", value: "amount" },
+        { text: "Aktif mi?", value: "isbool", align: " d-none" } //sadece tarihi geçenleri elemek için kullanılıyor.
       ],
       model: {
         company: "Creative Code Inc.",
@@ -81,12 +82,26 @@ export default {
   },
   methods: {
     getOrder() {
+      var curr = this.currentDateTime()
+        .split("-")
+        .join("");
       var userid = JSON.parse(localStorage.getItem("current_user"))[
         "customer_id"
       ];
       this.$axios.get("http://127.0.0.1:8000/orders/").then(res => {
         this.desserts = res.data;
+        //kendi siparişlerini çekme
         this.desserts = this.desserts.filter(e => e.customer_id == userid);
+        //süresi geçmişleri filtrele
+        for (let i = 0; i < this.desserts.length; i++) {
+          if (curr >= this.desserts[i].deadline.split("-").join("")) {
+            this.desserts[i].isbool = true;
+          } else {
+            this.desserts[i].isbool = false;
+          }
+        }
+        this.desserts = this.desserts.filter(e => e.isbool == true);
+
         this.$axios.get("http://127.0.0.1:8000/orderitems/").then(res => {
           for (let i = 0; i < this.desserts.length; i++) {
             for (let j = 0; j < res.data.length; j++) {
@@ -97,9 +112,26 @@ export default {
               }
             }
           }
+
           this.loaded = true;
         });
       });
+    },
+    currentDateTime() {
+      const current = new Date();
+      const day0 =
+        current.getDate() < 10 ? "0" + current.getDate() : current.getDate();
+
+      const month0 =
+        current.getMonth() + 1 < 10
+          ? "0" + (current.getMonth() + 1)
+          : current.getMonth() + 1;
+
+      const date = current.getFullYear() + "-" + month0 + "-" + day0;
+
+      const dateTime = date;
+
+      return dateTime;
     },
     yenile() {
       this.$forceUpdate();
