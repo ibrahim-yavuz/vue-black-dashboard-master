@@ -194,7 +194,7 @@ export default {
           labels: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran"],
           datasets: [
             {
-              label: "My First dataset",
+              label: "Süresi Geçen",
               fill: true,
               borderColor: config.colors.primary,
               borderWidth: 2,
