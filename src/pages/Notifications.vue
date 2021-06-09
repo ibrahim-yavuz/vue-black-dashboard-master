@@ -94,6 +94,8 @@ export default {
 
                 //console.log(Math.min(dizi));
               }
+
+              makineUret(Math.min(dizi));
             });
           });
       }
