@@ -37,6 +37,7 @@
 import NotificationTemplate from "./Notifications/NotificationTemplate";
 import { BaseAlert } from "@/components";
 import Urunler from "./gerekli_urunler.js";
+import Makineler from "./makineler.js";
 
 export default {
   components: {
@@ -73,32 +74,103 @@ export default {
     makineSatirTiklama(value) {
       console.log(value.work_center_name);
     },
+    makineUret(value, amount, id, pr_id) {
+      console.log(
+        "value: " +
+          value +
+          "\namount :" +
+          amount +
+          "\nsb_id: " +
+          id +
+          "\npr_id: " +
+          pr_id
+      );
+
+      this.$axios
+        .put("http://127.0.0.1:8000/subproducttree/" + id + "/", {
+          amount: amount + value,
+          product_id: pr_id,
+        })
+        .then((response) => console.log(response));
+    },
     uret(value) {
-      let dizi = [];
+      let sub_product_id = null;
+      let sub_amount = null;
+      console.log(value);
       let altUrunler = Urunler.altUrunBul(value);
       console.log(altUrunler);
 
-      for (let index = 0; index < altUrunler.length; index++) {
-        this.$axios
-          .get("http://127.0.0.1:8000/subproducttree/")
-          .then((response) => {
-            response.data.forEach((element) => {
+      if (altUrunler[0] == "stok") {
+        this.$alert("Stoktur");
+        return;
+      }
+
+      let obj = null;
+      let sayac = 0;
+
+      this.$axios
+        .get("http://127.0.0.1:8000/subproducttree/")
+        .then((response) => {
+          obj = response.data;
+
+          for (let index = 0; index < obj.length; index++) {
+            if (obj[index].product_id == value) {
+              sub_product_id = obj[index].sub_product_id;
+              sub_amount = obj[index].amount;
+              break;
+            }
+          }
+          var dizi = [];
+          for (let index = 0; index < altUrunler.length; index++) {
+            var sayac2 = 0;
+            console.log("ilkfor");
+            obj.forEach((element) => {
               if (element.product_id == altUrunler[index]) {
                 //console.log(element.amount);
                 if (element.amount != 0) {
-                  dizi.push(element.amount);
+                  dizi[sayac2++] = element.amount;
+                  console.log("sad: " + dizi.length);
+                  if (index == altUrunler.length - 1) {
+                    this.makineUret(
+                      Math.min(dizi),
+                      sub_amount,
+                      sub_product_id,
+                      value
+                    );
+                    console.log("dizi: " + dizi.length);
+                    for (let i = 0; i < dizi.length; i++) {
+                      this.$axios
+                        .get(
+                          "http://127.0.0.1:8000/subproducttree/" +
+                            altUrunler[i] +
+                            "/"
+                        )
+                        .then((resp) => {
+                          console.log("DenemeÇ: " + altUrunler[i]);
+
+                          this.$axios
+                            .put(
+                              "http://127.0.0.1:8000/subproducttree/" +
+                                altUrunler[i] +
+                                "/",
+                              {
+                                amount: resp.data.amount - Math.min(dizi),
+                                product_id: resp.data.product_id,
+                              }
+                            )
+                            .then((response) => console.log(response));
+                        });
+                    }
+                  }
                 } else {
                   console.log(element.product_id);
                   this.uret(element.product_id);
                 }
-
-                //console.log(Math.min(dizi));
               }
-
-              makineUret(Math.min(dizi));
+              sayac++;
             });
-          });
-      }
+          }
+        });
     },
   },
   created() {
