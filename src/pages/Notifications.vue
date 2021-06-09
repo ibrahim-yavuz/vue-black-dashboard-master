@@ -74,29 +74,8 @@ export default {
     makineSatirTiklama(value) {
       console.log(value.work_center_name);
     },
-    makineUret(value, amount, id, pr_id) {
-      console.log(
-        "value: " +
-          value +
-          "\namount :" +
-          amount +
-          "\nsb_id: " +
-          id +
-          "\npr_id: " +
-          pr_id
-      );
-
-      this.$axios
-        .put("http://127.0.0.1:8000/subproducttree/" + id + "/", {
-          amount: amount + value,
-          product_id: pr_id,
-        })
-        .then((response) => console.log(response));
-    },
+    makineUret(value, amount, id, pr_id) {},
     uret(value) {
-      let sub_product_id = null;
-      let sub_amount = null;
-      console.log(value);
       let altUrunler = Urunler.altUrunBul(value);
       console.log(altUrunler);
 
@@ -104,9 +83,6 @@ export default {
         this.$alert("Stoktur");
         return;
       }
-
-      let obj = null;
-      let sayac = 0;
 
       this.$axios
         .get("http://127.0.0.1:8000/subproducttree/")
@@ -128,39 +104,13 @@ export default {
               if (element.product_id == altUrunler[index]) {
                 //console.log(element.amount);
                 if (element.amount != 0) {
-                  dizi[sayac2++] = element.amount;
-                  console.log("sad: " + dizi.length);
                   if (index == altUrunler.length - 1) {
-                    this.makineUret(
+                    /*this.makineUret(
                       Math.min(dizi),
                       sub_amount,
                       sub_product_id,
                       value
-                    );
-                    console.log("dizi: " + dizi.length);
-                    for (let i = 0; i < dizi.length; i++) {
-                      this.$axios
-                        .get(
-                          "http://127.0.0.1:8000/subproducttree/" +
-                            altUrunler[i] +
-                            "/"
-                        )
-                        .then((resp) => {
-                          console.log("DenemeÇ: " + altUrunler[i]);
-
-                          this.$axios
-                            .put(
-                              "http://127.0.0.1:8000/subproducttree/" +
-                                altUrunler[i] +
-                                "/",
-                              {
-                                amount: resp.data.amount - Math.min(dizi),
-                                product_id: resp.data.product_id,
-                              }
-                            )
-                            .then((response) => console.log(response));
-                        });
-                    }
+                    );*/
                   }
                 } else {
                   console.log(element.product_id);
