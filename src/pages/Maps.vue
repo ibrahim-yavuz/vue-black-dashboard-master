@@ -75,6 +75,7 @@ export default {
   },
   components: { VueTableDynamic },
   methods: {
+    //sayfa açıldığında verileri tabloya çeker, çekene kadar da görüntülenmez.
     getArray() {
       this.$axios
         .get("http://127.0.0.1:8000/orders/", {
@@ -100,11 +101,13 @@ export default {
                 .get("http://127.0.0.1:8000/subproducttree/")
                 .then(res => {
                   this.temp = res.data;
-                  this.loaded = true;
+                  this.loaded = true; // yüklemeyi bekleten değer
                 });
             });
         });
     },
+    //son teslim tarihini arayüzde renkli biçimde görülebilir hale getiren fonksiyon
+    //hazır template kullandığımızdan zaten bir renk ataması var bastırmak için important kullandık.
     getColor(item) {
       var curr = this.currentDateTime()
         .split("-")
@@ -116,6 +119,7 @@ export default {
         return "red !important";
       }
     },
+    //zaman fonksiyonu YYYY/AA/GG
     currentDateTime() {
       const current = new Date();
       const day0 =
@@ -132,7 +136,7 @@ export default {
 
       return dateTime;
     },
-
+    //Siparişi onaylayıp stoktan düştükten sonra silen fonksiyon
     Onayla(item) {
       this.message = " Numaralı Spiariş Onaylandı. ";
       var adet = 0;
@@ -159,6 +163,7 @@ export default {
         }
       }
     },
+    //siparişi tablodan ve apiden silen fonksiyon
     IptalEt(item) {
       this.$axios
         .delete("http://localhost:8000/orders/" + item.order_id + "/")
