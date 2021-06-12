@@ -70,7 +70,7 @@ import makineler from "./makineler.js";
 
 export default {
   components: {
-    BaseAlert,
+    BaseAlert
   },
   data() {
     return {
@@ -83,7 +83,7 @@ export default {
       altUrun: null,
       type: ["", "info", "success", "warning", "danger"],
       notifications: {
-        topCenter: false,
+        topCenter: false
       },
       items: [],
       calisanMakineler: [],
@@ -93,7 +93,7 @@ export default {
         { text: "Ürün Tipi", value: "urun_tipi" },
         { text: "Satılma Durumu", value: "satilabilme_durumu" },
         { text: "Adet", value: "miktar" },
-        { text: "Üret", value: "action" },
+        { text: "Üret", value: "action" }
       ],
       makine_items: [],
       makine_headers: [
@@ -102,12 +102,11 @@ export default {
         { text: "Durum", value: "active" },
         { text: "İşlem ID", value: "operation_id" },
         { text: "Hız", value: "speed" },
-        { text: "Ürün Tipi", value: "product_type" },
-      ],
+        { text: "Ürün Tipi", value: "product_type" }
+      ]
     };
   },
   methods: {
-    satirTiklama(value) {},
     icindeVarMi(dizi, id) {
       for (let index = 0; index < dizi.length; index++) {
         if (id == dizi[index].id) {
@@ -117,17 +116,7 @@ export default {
       }
       return false;
     },
-    makineSatirTiklama(value) {},
-    makineUret(value, amount, id, pr_id) {},
     uret(value) {
-      /*if (!this.tekrar_calistir) {
-        for (let i = 0; i < this.calisanMakineler.length; i++) {
-          if (this.icindeVarMi(this.calisanMakineler, value)) {
-            return;
-          }
-        }
-      }*/
-
       let altUrunler = Urunler.altUrunBul(value);
       let altUrunlerMiktarlar = [];
       let min_miktar = 0;
@@ -143,11 +132,11 @@ export default {
 
       this.$axios
         .get("http://127.0.0.1:8000/products/" + value + "/")
-        .then((res) => {
+        .then(res => {
           if (!this.icindeVarMi(this.calisanMakineler, value)) {
             this.calisanMakineler.push({
               id: value,
-              product_type: res.data.product_type,
+              product_type: res.data.product_type
             });
           }
 
@@ -167,10 +156,10 @@ export default {
                       "/",
                     {
                       work_center_name: this.makine_items[j].work_center_name,
-                      active: false,
+                      active: false
                     }
                   )
-                  .then((response) => {
+                  .then(response => {
                     this.makineVeriCek();
                   });
               }
@@ -179,7 +168,7 @@ export default {
 
           this.$axios
             .get("http://127.0.0.1:8000/subproducttree/")
-            .then((response) => {
+            .then(response => {
               for (let i = 0; i < altUrunler.length; i++) {
                 for (let j = 0; j < response.data.length; j++) {
                   if (response.data[j].product_id == value) {
@@ -190,7 +179,7 @@ export default {
                     altUrunlerMiktarlar.push({
                       id: altUrunler[i],
                       miktar: response.data[j].amount,
-                      sb_id: response.data[j].sub_product_id,
+                      sb_id: response.data[j].sub_product_id
                     });
                   }
                 }
@@ -217,14 +206,14 @@ export default {
                       current_sb_prd_id +
                       "/"
                   )
-                  .then((response) => {
+                  .then(response => {
                     this.$axios.put(
                       "http://127.0.0.1:8000/subproducttree/" +
                         current_sb_prd_id +
                         "/",
                       {
                         product_id: value,
-                        amount: this.makine_hizi + response.data.amount,
+                        amount: this.makine_hizi + response.data.amount
                       }
                     );
 
@@ -236,7 +225,7 @@ export default {
                         {
                           product_id: altUrunlerMiktarlar[i].id,
                           amount:
-                            altUrunlerMiktarlar[i].miktar - this.makine_hizi,
+                            altUrunlerMiktarlar[i].miktar - this.makine_hizi
                         }
                       );
                     }
@@ -248,12 +237,12 @@ export default {
                             this.makine_items[i].work_center_id +
                             "/",
                           {
-                            work_center_name:
-                              this.makine_items[i].work_center_name,
-                            active: true,
+                            work_center_name: this.makine_items[i]
+                              .work_center_name,
+                            active: true
                           }
                         )
-                        .then((response) => {
+                        .then(response => {
                           this.calisanMakineler = [];
                         });
                     }
@@ -273,7 +262,7 @@ export default {
       var _this = this;
       if (surdur) {
         if (this.tiklama_sayaci < 2) {
-          this.interval_ = setInterval(function () {
+          this.interval_ = setInterval(function() {
             _this.uret(item);
           }, 3000);
         } else {
@@ -289,10 +278,10 @@ export default {
                 "/",
               {
                 work_center_name: this.makine_items[i].work_center_name,
-                active: true,
+                active: true
               }
             )
-            .then((response) => {
+            .then(response => {
               this.makineVeriCek();
               this.interval_ = null;
               this.$alert("Üretim işlemi başarıyla durduruldu");
@@ -304,6 +293,7 @@ export default {
         this.$alert("Şu an gerçekleşen bir üretim bulunmamaktadır!");
       }
     },
+    //makine tablosunun verilerini apiden çeker atama yapar ve yenilemek için tekrar kullanılabilir.
     makineVeriCek() {
       this.load = false;
       let operation_url = "http://127.0.0.1:8000/operations/";
@@ -311,9 +301,9 @@ export default {
       let work_center_operation_url =
         "http://127.0.0.1:8000/workcenteroperation/";
 
-      this.$axios.get(operation_url).then((operation) => {
-        this.$axios.get(work_center_url).then((wc) => {
-          this.$axios.get(work_center_operation_url).then((wc_op) => {
+      this.$axios.get(operation_url).then(operation => {
+        this.$axios.get(work_center_url).then(wc => {
+          this.$axios.get(work_center_operation_url).then(wc_op => {
             for (let index = 0; index < operation.data.length; index++) {
               this.makine_items[index].operation_id =
                 operation.data[index].operation_id;
@@ -330,7 +320,7 @@ export default {
           });
         });
       });
-    },
+    }
   },
   created() {
     this.makineVeriCek();
@@ -339,9 +329,9 @@ export default {
     let alt_urun_url = "http://127.0.0.1:8000/subproducttree/";
     let makine_url = "http://127.0.0.1:8000/workcenters/";
 
-    this.$axios.get(urun_url).then((response) => {
+    this.$axios.get(urun_url).then(response => {
       this.urun = response.data;
-      this.$axios.get(alt_urun_url).then((response) => {
+      this.$axios.get(alt_urun_url).then(response => {
         this.altUrun = response.data;
 
         for (let i = 0; i < this.urun.length; i++) {
@@ -350,23 +340,22 @@ export default {
             urun_ismi: this.urun[i].product_name,
             urun_tipi: this.urun[i].product_type,
             satilabilme_durumu: this.urun[i].is_salable,
-            miktar: this.altUrun[i].amount,
+            miktar: this.altUrun[i].amount
           });
         }
       });
     });
 
-    this.$axios.get(makine_url).then((response) => {
+    this.$axios.get(makine_url).then(response => {
       for (let index = 0; index < response.data.length; index++) {
         this.makine_items.push({
           work_center_id: response.data[index].work_center_id,
           work_center_name: response.data[index].work_center_name,
-          active: response.data[index].active,
+          active: response.data[index].active
         });
       }
     });
-  },
+  }
 };
 </script>
-<style>
-</style>
+<style></style>

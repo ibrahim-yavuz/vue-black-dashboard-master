@@ -100,7 +100,7 @@ export default {
             this.desserts[i].isbool = false;
           }
         }
-        this.desserts = this.desserts.filter(e => e.isbool == true);
+        this.desserts = this.desserts.filter(e => e.isbool == false);
 
         this.$axios.get("http://127.0.0.1:8000/orderitems/").then(res => {
           for (let i = 0; i < this.desserts.length; i++) {

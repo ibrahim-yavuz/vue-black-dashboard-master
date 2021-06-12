@@ -3,16 +3,16 @@
     <side-bar v-if="!logindeMi">
       <template slot="links">
         <sidebar-link
-          v-if="userMi"
-          to="/dashboard"
-          :name="$t('sidebar.dashboard')"
-          icon="tim-icons icon-chart-pie-36"
-        />
-        <sidebar-link
           v-if="!userMi"
           to="/icons"
           :name="$t('sidebar.icons')"
           icon="tim-icons icon-atom"
+        />
+        <sidebar-link
+          v-if="userMi"
+          to="/dashboard"
+          :name="$t('sidebar.dashboard')"
+          icon="tim-icons icon-chart-pie-36"
         />
         <sidebar-link
           v-if="userMi"
@@ -66,8 +66,7 @@
     </div>
   </div>
 </template>
-<style lang="scss">
-</style>
+<style lang="scss"></style>
 <script>
 import TopNavbar from "./TopNavbar.vue";
 import ContentFooter from "./ContentFooter.vue";
@@ -79,12 +78,12 @@ export default {
     TopNavbar,
     ContentFooter,
     DashboardContent,
-    MobileMenu,
+    MobileMenu
   },
   data() {
     return {
       girisYapildiMi: false,
-      userMi: false,
+      userMi: false
     };
   },
   methods: {
@@ -92,7 +91,7 @@ export default {
       if (this.$sidebar.showSidebar) {
         this.$sidebar.displaySidebar(false);
       }
-    },
+    }
   },
   created() {
     this.logindeMi = this.$route.name == "login" ? true : false;
@@ -107,6 +106,6 @@ export default {
     } else if (localStorage.getItem("user_type") == "customer") {
       this.userMi = false;
     }
-  },
+  }
 };
 </script>

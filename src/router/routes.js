@@ -16,12 +16,12 @@ const LoginPage = () => import("@/pages/LoginPage.vue");
 const routes = [{
     path: "/",
     component: DashboardLayout,
-    redirect: "/login",
+    redirect: "/profile",
     children: [
       {
-        path: "dashboard",
-        name: "dashboard",
-        component: Dashboard,
+        path: "profile",
+        name: "profile",
+        component: Profile,
         beforeEnter(to, from, next){
           if(JSON.parse(localStorage.getItem("current_user")) !== null){
             next();
@@ -33,16 +33,19 @@ const routes = [{
         name: "login",
         component: LoginPage
       },
+
       {
-        path: "profile",
-        name: "profile",
-        component: Profile,
+        path: "dashboard",
+        name: "dashboard",
+        component: Dashboard,
         beforeEnter(to, from, next){
           if(JSON.parse(localStorage.getItem("current_user")) !== null){
             next();
           }else next('login')
         }
       },
+      
+      
       {
         path: "notifications",
         name: "notifications",
